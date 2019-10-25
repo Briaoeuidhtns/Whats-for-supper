@@ -6,9 +6,9 @@ import Container from '@material-ui/core/Container'
 
 const App: React.FC = () => (
   <Container maxWidth="xs">
-    <AddRecipe />
     <RecipeStack />
     <Reactions />
+    <AddRecipe />
   </Container>
 )
 

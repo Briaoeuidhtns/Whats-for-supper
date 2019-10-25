@@ -9,7 +9,7 @@ const selectIndex = (state: RootState) => state.recipeReducer.index
 
 const selectRecipe = createSelector(
   [selectRecipes, selectIndex],
-  (recipes, index) => recipes[index] || { title: 'No more recipes available' }
+  (recipes, index) => recipes[index] || { title: 'No available recipes' }
 )
 
 const mapState = (state: RootState) => ({

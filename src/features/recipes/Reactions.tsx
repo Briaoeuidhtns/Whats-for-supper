@@ -15,7 +15,8 @@ const mapState = createSelector(
   [selectRecipes, selectIndex],
   (recipes, index) => ({
     hasPrev: index > 0,
-    hasNext: index < recipes.length,
+    has: index < recipes.length,
+    hasNext: index < recipes.length - 1,
   })
 )
 
@@ -27,6 +28,7 @@ const Reactions: React.FC<Props> = ({
   nextRecipe,
   prevRecipe,
   hasPrev,
+  has,
   hasNext,
 }) => (
   <ButtonGroup color="primary" variant="contained" fullWidth>
@@ -35,7 +37,7 @@ const Reactions: React.FC<Props> = ({
       Previous
     </Button>
 
-    <Button disabled={!hasNext}>Select</Button>
+    <Button disabled={!has}>Select</Button>
 
     <Button disabled={!hasNext} onClick={nextRecipe}>
       Next

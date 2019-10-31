@@ -2,20 +2,21 @@ import React from 'react'
 import { render } from 'react-dom'
 
 import { Provider } from 'react-redux'
-import { configureStore } from 'redux-starter-kit'
 
 import App from './components/App'
-import rootReducer from './app/rootReducer'
+
+import store, { persistor } from './app/store'
+import { PersistGate } from 'redux-persist/integration/react'
+
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 import * as serviceWorker from './serviceWorker'
 
-const store = configureStore({
-  reducer: rootReducer,
-})
-
 render(
   <Provider store={store}>
-    <App />
+    <PersistGate loading={<CircularProgress />} persistor={persistor}>
+      <App />
+    </PersistGate>
   </Provider>,
   document.getElementById('root')
 )

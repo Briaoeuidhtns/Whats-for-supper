@@ -21,6 +21,10 @@ const recipeSlice = createSlice({
     addRecipe(state: RecipeListState, { payload: recipe }) {
       state.recipes.push(recipe)
     },
+    removeRecipe(state: RecipeListState) {
+      state.recipes.splice(state.index, 1)
+      state.index = Math.max(state.index - 1, 0)
+    },
     nextRecipe(state) {
       state.index++
     },
@@ -40,6 +44,7 @@ const recipeSlice = createSlice({
 
 export const {
   addRecipe,
+  removeRecipe,
   nextRecipe,
   prevRecipe,
   makeRecipe,

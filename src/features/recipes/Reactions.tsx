@@ -5,7 +5,7 @@ import ButtonGroup from '@material-ui/core/ButtonGroup'
 import PrevIcon from '@material-ui/icons/NavigateBefore'
 import { createSelector } from 'redux-starter-kit'
 import NextIcon from '@material-ui/icons/NavigateNext'
-import { nextRecipe, prevRecipe } from './recipeSlice'
+import { nextRecipe, prevRecipe, makeRecipe } from './recipeSlice'
 import { RootState } from '../../app/rootReducer'
 
 const selectRecipes = (state: RootState) => state.recipeReducer.recipes
@@ -20,26 +20,29 @@ const mapState = createSelector(
   })
 )
 
-const mapDispatch = { nextRecipe, prevRecipe }
+const mapDispatch = { nextRecipe, prevRecipe, makeRecipe }
 interface OwnProps {}
 
 type Props = ReturnType<typeof mapState> & typeof mapDispatch & OwnProps
 const Reactions: React.FC<Props> = ({
   nextRecipe,
   prevRecipe,
+  makeRecipe,
   hasPrev,
   has,
   hasNext,
 }) => (
   <ButtonGroup color="primary" variant="contained" fullWidth>
-    <Button onClick={prevRecipe} disabled={!hasPrev}>
+    <Button onClick={() => prevRecipe()} disabled={!hasPrev}>
       <PrevIcon />
       Previous
     </Button>
 
-    <Button disabled={!has}>Select</Button>
+    <Button onClick={() => makeRecipe()} disabled={!has}>
+      Select
+    </Button>
 
-    <Button disabled={!hasNext} onClick={nextRecipe}>
+    <Button onClick={() => nextRecipe()} disabled={!hasNext}>
       Next
       <NextIcon />
     </Button>

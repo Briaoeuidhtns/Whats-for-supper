@@ -27,9 +27,22 @@ const recipeSlice = createSlice({
     prevRecipe(state) {
       state.index--
     },
+    makeRecipe(state) {
+      // Remove the selected recipe
+      const selected_recipe = state.recipes.splice(state.index, 1)[0]
+
+      // Add it as the last recipe
+      state.recipes.push(selected_recipe)
+      state.index = 0
+    },
   },
 })
 
-export const { addRecipe, nextRecipe, prevRecipe } = recipeSlice.actions
+export const {
+  addRecipe,
+  nextRecipe,
+  prevRecipe,
+  makeRecipe,
+} = recipeSlice.actions
 
 export default recipeSlice.reducer

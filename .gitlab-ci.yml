@@ -1,0 +1,51 @@
+image: node:lts-alpine
+
+stages:
+  - validate
+  - build
+
+cache:
+  paths:
+    - node_modules/
+
+install:
+  stage: .pre
+  tags:
+    - Ubuntu 18.04
+  script: yarn
+  
+
+test unit:
+  stage: validate
+  tags:
+    - Ubuntu 18.04
+
+  script:
+    - yarn test-junit
+    
+  artifacts:
+    reports:
+      junit: test-report.xml
+    paths:
+      - test-report.xml
+
+check format:
+  stage: validate
+  tags:
+    - Ubuntu 18.04
+
+  script:
+    - yarn check-format
+
+build:
+  stage: build
+  tags:
+    - Ubuntu 18.04
+  
+  script:
+    - yarn build
+    
+  artifacts:
+    paths:
+      - build
+

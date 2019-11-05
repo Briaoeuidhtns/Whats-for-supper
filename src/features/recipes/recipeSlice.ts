@@ -44,8 +44,13 @@ const recipeSlice = createSlice({
   },
 })
 
-const selectRecipes = (state: RootState) => state.recipeReducer.recipes
-const selectIndex = (state: RootState) => state.recipeReducer.index
+export const {
+  actions: { addRecipe, removeRecipe, nextRecipe, prevRecipe, makeRecipe },
+  slice,
+} = recipeSlice
+
+export const selectRecipes = (state: RootState) => state[slice].recipes
+export const selectIndex = (state: RootState) => state[slice].index
 
 export const availabilityStateMap = createSelector(
   [selectRecipes, selectIndex],
@@ -55,13 +60,5 @@ export const availabilityStateMap = createSelector(
     hasNext: index < recipes.length - 1,
   })
 )
-
-export const {
-  addRecipe,
-  removeRecipe,
-  nextRecipe,
-  prevRecipe,
-  makeRecipe,
-} = recipeSlice.actions
 
 export default recipeSlice.reducer

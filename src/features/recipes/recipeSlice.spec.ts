@@ -1,5 +1,6 @@
 import recipeReducer, {
   Recipe,
+  slice,
   prevRecipe,
   nextRecipe,
   addRecipe,
@@ -145,7 +146,7 @@ describe('avaliability state map', () => {
   it('describes recipe availability', () => {
     expect(
       availabilityStateMap({
-        recipeReducer: { recipes: [], index: 0 },
+        [slice]: { recipes: [], index: 0 },
       })
     ).toEqual({
       hasPrev: false,
@@ -155,7 +156,7 @@ describe('avaliability state map', () => {
 
     expect(
       availabilityStateMap({
-        recipeReducer: { recipes: [dummyRecipe], index: 0 },
+        [slice]: { recipes: [dummyRecipe], index: 0 },
       })
     ).toEqual({
       hasPrev: false,
@@ -165,7 +166,7 @@ describe('avaliability state map', () => {
 
     expect(
       availabilityStateMap({
-        recipeReducer: { recipes: [dummyRecipe, dummyRecipe], index: 0 },
+        [slice]: { recipes: [dummyRecipe, dummyRecipe], index: 0 },
       })
     ).toEqual({
       hasPrev: false,
@@ -175,7 +176,7 @@ describe('avaliability state map', () => {
 
     expect(
       availabilityStateMap({
-        recipeReducer: { recipes: [dummyRecipe, dummyRecipe], index: 1 },
+        [slice]: { recipes: [dummyRecipe, dummyRecipe], index: 1 },
       })
     ).toEqual({
       hasPrev: true,

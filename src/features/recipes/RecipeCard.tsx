@@ -1,9 +1,6 @@
 import React from 'react'
 import { Recipe } from './recipeSlice'
-import Card from '@material-ui/core/Card'
-import CardHeader from '@material-ui/core/CardHeader'
-import CardContent from '@material-ui/core/CardContent'
-import Typography from '@material-ui/core/Typography'
+import { Card, CardHeader, CardContent, Typography } from '@material-ui/core'
 
 const RecipeCard = (recipe: Recipe) => {
   return (

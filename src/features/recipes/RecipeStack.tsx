@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import RecipeCard from './RecipeCard'
 import { createSelector } from 'redux-starter-kit'
+
+import RecipeCard from './RecipeCard'
 import { RootState } from '../../app/rootReducer'
 
 const selectRecipes = (state: RootState) => state.recipeReducer.recipes

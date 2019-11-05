@@ -5,6 +5,7 @@ import recipeReducer, {
   addRecipe,
   removeRecipe,
   makeRecipe,
+  availabilityStateMap,
 } from './recipeSlice'
 
 const dummyRecipe: Recipe = { title: 'Dummy Recipe' },
@@ -137,5 +138,49 @@ describe('recipe reducer', () => {
   ).toEqual({
     recipes: [dummyRecipe, dummyRecipe3, dummyRecipe2],
     index: 0,
+  })
+})
+
+describe('avaliability state map', () => {
+  it('describes recipe availability', () => {
+    expect(
+      availabilityStateMap({
+        recipeReducer: { recipes: [], index: 0 },
+      })
+    ).toEqual({
+      hasPrev: false,
+      has: false,
+      hasNext: false,
+    })
+
+    expect(
+      availabilityStateMap({
+        recipeReducer: { recipes: [dummyRecipe], index: 0 },
+      })
+    ).toEqual({
+      hasPrev: false,
+      has: true,
+      hasNext: false,
+    })
+
+    expect(
+      availabilityStateMap({
+        recipeReducer: { recipes: [dummyRecipe, dummyRecipe], index: 0 },
+      })
+    ).toEqual({
+      hasPrev: false,
+      has: true,
+      hasNext: true,
+    })
+
+    expect(
+      availabilityStateMap({
+        recipeReducer: { recipes: [dummyRecipe, dummyRecipe], index: 1 },
+      })
+    ).toEqual({
+      hasPrev: true,
+      has: true,
+      hasNext: false,
+    })
   })
 })

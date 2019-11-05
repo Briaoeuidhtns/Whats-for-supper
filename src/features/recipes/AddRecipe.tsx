@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { addRecipe, removeRecipe } from './recipeSlice'
+import { addRecipe, removeRecipe, availabilityStateMap } from './recipeSlice'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import AddIcon from '@material-ui/icons/Add'
@@ -13,24 +13,13 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import { DialogTitle } from '@material-ui/core'
 import Box from '@material-ui/core/Box'
-import { createSelector } from 'redux-starter-kit'
-
-import { RootState } from '../../app/rootReducer'
-
-const selectRecipes = (state: RootState) => state.recipeReducer.recipes
-const selectIndex = (state: RootState) => state.recipeReducer.index
-
-const mapState = createSelector(
-  [selectRecipes, selectIndex],
-  (recipes, index) => ({
-    has: index < recipes.length,
-  })
-)
 
 const mapDispatch = { addRecipe, removeRecipe }
 interface OwnProps {}
 
-type Props = ReturnType<typeof mapState> & typeof mapDispatch & OwnProps
+type Props = ReturnType<typeof availabilityStateMap> &
+  typeof mapDispatch &
+  OwnProps
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -104,6 +93,6 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
 }
 
 export default connect(
-  mapState,
+  availabilityStateMap,
   mapDispatch
 )(AddRecipeDialog)

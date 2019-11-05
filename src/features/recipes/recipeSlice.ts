@@ -1,4 +1,6 @@
 import { createSlice } from 'redux-starter-kit'
+import { RootState } from '../../app/rootReducer'
+import { createSelector } from 'redux-starter-kit'
 
 export interface Recipe {
   title: string
@@ -41,6 +43,18 @@ const recipeSlice = createSlice({
     },
   },
 })
+
+const selectRecipes = (state: RootState) => state.recipeReducer.recipes
+const selectIndex = (state: RootState) => state.recipeReducer.index
+
+export const availabilityStateMap = createSelector(
+  [selectRecipes, selectIndex],
+  (recipes, index) => ({
+    hasPrev: index > 0,
+    has: index < recipes.length,
+    hasNext: index < recipes.length - 1,
+  })
+)
 
 export const {
   addRecipe,

@@ -54,8 +54,13 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
     if (!recipeText.trim()) {
       return
     }
-    addRecipe({ title: recipeText })
-    setRecipeText('')
+    addRecipe({
+      title: recipeText,
+      image: encodeURI(
+        'https://loremflickr.com/400/250/' + recipeText + '?lock=1'
+      ),
+    })
+    cancel()
   }
 
   const cancel = () => {

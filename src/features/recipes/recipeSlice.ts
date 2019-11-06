@@ -2,6 +2,7 @@ import { createSlice } from 'redux-starter-kit'
 
 export interface Recipe {
   title: string
+  image?: string
 }
 
 export interface RecipeListState {
@@ -18,7 +19,10 @@ const recipeSlice = createSlice({
   slice: 'recipes',
   initialState,
   reducers: {
-    addRecipe(state: RecipeListState, { payload: recipe }) {
+    addRecipe(
+      state: RecipeListState,
+      { payload: recipe }: { payload: Recipe }
+    ) {
       state.recipes.push(recipe)
     },
     removeRecipe(state: RecipeListState) {

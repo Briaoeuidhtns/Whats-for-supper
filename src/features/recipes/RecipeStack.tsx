@@ -25,7 +25,7 @@ type Props = ReturnType<typeof mapState> & typeof mapDispatch & OwnProps
 
 const RecipeList: React.FC<Props> = ({ recipe }) => (
   <div>
-    <RecipeCard {...recipe} />
+    <RecipeCard {...{ recipe }} />
   </div>
 )
 

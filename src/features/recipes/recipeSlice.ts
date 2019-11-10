@@ -4,6 +4,7 @@ import { createSelector } from 'redux-starter-kit'
 
 export interface Recipe {
   title: string
+  description: string
 }
 
 export interface RecipeListState {

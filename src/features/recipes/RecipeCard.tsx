@@ -11,10 +11,7 @@ const RecipeCard = (recipe: Recipe) => {
       <CardHeader title={recipe.title} />
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qui ita
-          affectus, beatum esse numquam probabis; Tamen a proposito, inquam,
-          aberramus. Vitiosum est enim in dividendo partem in genere numerare.
-          Duo Reges: constructio interrete.
+          {recipe.description}
         </Typography>
       </CardContent>
     </Card>

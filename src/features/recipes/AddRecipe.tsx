@@ -34,7 +34,8 @@ const useStyles = makeStyles((theme: Theme) =>
 const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
   const classes = useStyles()
   const [open, setOpen] = useState(false)
-  const [recipeText, recipeDescription, setRecipeText] = useState('')
+  const [recipeText, setRecipeText] = useState('')
+  const [recipeDescription, setRecipeDescription] = useState('')
 
   const submit = () => {
     setOpen(false)
@@ -43,11 +44,13 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
     }
     addRecipe({ title: recipeText, description: recipeDescription })
     setRecipeText('')
+    setRecipeDescription('')
   }
 
   const cancel = () => {
     setOpen(false)
     setRecipeText('')
+    setRecipeDescription('')
   }
 
   return (
@@ -79,12 +82,14 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
             onChange={e => setRecipeText(e.target.value)}
           />
           <TextField
-            autoFocus
+            multiline
+            rows="3"
+            placeholder="Add information about your recipe here..."
             margin="dense"
             label="Recipe Description"
             fullWidth
             value={recipeDescription}
-            onChange={e => setRecipeText(e.target.value)}
+            onChange={e => setRecipeDescription(e.target.value)}
           />
         </DialogContent>
         <DialogActions>

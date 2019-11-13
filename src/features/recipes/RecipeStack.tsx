@@ -27,7 +27,4 @@ const RecipeList: React.FC<Props> = ({ recipe }) => (
   </div>
 )
 
-export default connect(
-  mapState,
-  mapDispatch
-)(RecipeList)
+export default connect(mapState, mapDispatch)(RecipeList)

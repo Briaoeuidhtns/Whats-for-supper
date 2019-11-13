@@ -1,9 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Button from '@material-ui/core/Button'
-import ButtonGroup from '@material-ui/core/ButtonGroup'
-import PrevIcon from '@material-ui/icons/NavigateBefore'
-import NextIcon from '@material-ui/icons/NavigateNext'
+
+import { Button, ButtonGroup } from '@material-ui/core'
+import {
+  NavigateBefore as PrevIcon,
+  NavigateNext as NextIcon,
+} from '@material-ui/icons'
+
 import {
   nextRecipe,
   prevRecipe,
@@ -12,11 +15,13 @@ import {
 } from './recipeSlice'
 
 const mapDispatch = { nextRecipe, prevRecipe, makeRecipe }
+
 interface OwnProps {}
 
 type Props = ReturnType<typeof availabilityStateMap> &
   typeof mapDispatch &
   OwnProps
+
 const Reactions: React.FC<Props> = ({
   nextRecipe,
   prevRecipe,
@@ -42,7 +47,4 @@ const Reactions: React.FC<Props> = ({
   </ButtonGroup>
 )
 
-export default connect(
-  availabilityStateMap,
-  mapDispatch
-)(Reactions)
+export default connect(availabilityStateMap, mapDispatch)(Reactions)

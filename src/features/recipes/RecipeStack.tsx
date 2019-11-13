@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import RecipeCard from './RecipeCard'
 import { createSelector } from 'redux-starter-kit'
+
+import RecipeCard from './RecipeCard'
 import { RootState } from '../../app/rootReducer'
 import { selectRecipes, selectIndex } from './recipeSlice'
 
@@ -22,7 +23,7 @@ type Props = ReturnType<typeof mapState> & typeof mapDispatch & OwnProps
 
 const RecipeList: React.FC<Props> = ({ recipe }) => (
   <div>
-    <RecipeCard {...recipe} />
+    <RecipeCard {...{ recipe }} />
   </div>
 )
 

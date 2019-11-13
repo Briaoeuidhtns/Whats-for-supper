@@ -1,20 +1,24 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { addRecipe, removeRecipe, availabilityStateMap } from './recipeSlice'
-import TextField from '@material-ui/core/TextField'
-import Button from '@material-ui/core/Button'
-import AddIcon from '@material-ui/icons/Add'
-import RemoveIcon from '@material-ui/icons/Remove'
-import Fab from '@material-ui/core/Fab'
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogContentText from '@material-ui/core/DialogContentText'
+
+import {
+  TextField,
+  Button,
+  Box,
+  Fab,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+} from '@material-ui/core'
+import { Add as AddIcon, Remove as RemoveIcon } from '@material-ui/icons'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import { DialogTitle } from '@material-ui/core'
-import Box from '@material-ui/core/Box'
+
+import { addRecipe, removeRecipe, availabilityStateMap } from './recipeSlice'
 
 const mapDispatch = { addRecipe, removeRecipe }
+
 interface OwnProps {}
 
 type Props = ReturnType<typeof availabilityStateMap> &
@@ -41,8 +45,13 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
     if (!recipeText.trim()) {
       return
     }
-    addRecipe({ title: recipeText })
-    setRecipeText('')
+    addRecipe({
+      title: recipeText,
+      image: encodeURI(
+        'https://loremflickr.com/400/250/' + recipeText + '?lock=1'
+      ),
+    })
+    cancel()
   }
 
   const cancel = () => {
@@ -92,7 +101,4 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
   )
 }
 
-export default connect(
-  availabilityStateMap,
-  mapDispatch
-)(AddRecipeDialog)
+export default connect(availabilityStateMap, mapDispatch)(AddRecipeDialog)

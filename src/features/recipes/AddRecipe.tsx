@@ -18,7 +18,6 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import { addRecipe, removeRecipe, availabilityStateMap } from './recipeSlice'
 
 const mapDispatch = { addRecipe, removeRecipe }
-
 interface OwnProps {}
 
 type Props = ReturnType<typeof availabilityStateMap> &

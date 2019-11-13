@@ -3,9 +3,7 @@ import { connect } from 'react-redux'
 import RecipeCard from './RecipeCard'
 import { createSelector } from 'redux-starter-kit'
 import { RootState } from '../../app/rootReducer'
-
-const selectRecipes = (state: RootState) => state.recipeReducer.recipes
-const selectIndex = (state: RootState) => state.recipeReducer.index
+import { selectRecipes, selectIndex } from './recipeSlice'
 
 const selectRecipe = createSelector(
   [selectRecipes, selectIndex],

@@ -9,9 +9,9 @@ import recipeReducer, {
   availabilityStateMap,
 } from './recipeSlice'
 
-const dummyRecipe: Recipe = { title: 'Dummy Recipe' },
-  dummyRecipe2: Recipe = { title: 'Dummy Recipe 2' },
-  dummyRecipe3: Recipe = { title: 'Dummy Recipe 3' }
+const dummyRecipe: Recipe = { title: 'Dummy Recipe' , rating: 3},
+  dummyRecipe2: Recipe = { title: 'Dummy Recipe 2', rating: 4 },
+  dummyRecipe3: Recipe = { title: 'Dummy Recipe 3', rating: 5 }
 
 describe('recipe reducer', () => {
   it('should handle prevRecipe', () => {

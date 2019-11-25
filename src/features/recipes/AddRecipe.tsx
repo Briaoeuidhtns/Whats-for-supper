@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import Rating from '@material-ui/lab/Rating';
+import Rating from '@material-ui/lab/Rating'
 
 import {
   TextField,
@@ -50,7 +50,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
       title: recipeText,
       image: encodeURI(
         'https://loremflickr.com/400/250/' + recipeText + '?lock=1'
-      ), 
+      ),
       rating: ratingText,
     })
     cancel()
@@ -82,24 +82,24 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
         <DialogTitle>Add a recipe</DialogTitle>
         <DialogContent>
           <div>
-          <DialogContentText>Add your recipe information</DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Recipe Title"
-            fullWidth
-            value={recipeText}
-            onChange={e => setRecipeText(e.target.value)}
-          />
+            <DialogContentText>Add your recipe information</DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              label="Recipe Title"
+              fullWidth
+              value={recipeText}
+              onChange={e => setRecipeText(e.target.value)}
+            />
           </div>
           <div>
-              <DialogContentText> How would you rate this? </DialogContentText>
-                <Rating
-                  name="size-large"
-                  size = "large"
-                  value={ratingText}
-                  onChange={(event, newValue) => setRecipeRating(newValue)}
-                />
+            <DialogContentText> How would you rate this? </DialogContentText>
+            <Rating
+              name="size-large"
+              size="large"
+              value={ratingText}
+              onChange={(event, newValue) => setRecipeRating(newValue)}
+            />
           </div>
         </DialogContent>
         <DialogActions>

@@ -103,7 +103,7 @@ describe('recipe reducer', () => {
     ).toEqual({
       recipes: [],
       index: 0,
-      showDescription: false
+      showDescription: false,
     })
 
     expect(

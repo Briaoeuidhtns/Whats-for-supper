@@ -9,14 +9,18 @@ import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import { Collapse } from '@material-ui/core'
 
-const ExpandableIcon = (showDescription: boolean) =>
-  showDescription ? <ExpandLessIcon /> : <ExpandMoreIcon />
+interface IconProps {
+  expand: boolean
+}
+
+const ExpandableIcon: React.FC<IconProps> = ({ expand }) =>
+  expand ? <ExpandLessIcon /> : <ExpandMoreIcon />
 
 interface OwnProps {
   recipe: Recipe
   placeholder?: string
   showDescription: boolean
-  toggleDescription: any // TODO: figure out what type this function is supposed to be
+  toggleDescription: React.MouseEventHandler<HTMLButtonElement>
 }
 
 type Props = OwnProps
@@ -30,8 +34,8 @@ const RecipeCard: React.FC<Props> = ({
   return (
     <Card>
       <CardHeader title={recipe.title} />
-      <IconButton onClick={() => toggleDescription()}>
-        <ExpandableIcon {...showDescription} />
+      <IconButton onClick={toggleDescription}>
+        <ExpandableIcon expand={showDescription} />
       </IconButton>
       <Collapse in={showDescription} timeout="auto" unmountOnExit>
         <CardContent>

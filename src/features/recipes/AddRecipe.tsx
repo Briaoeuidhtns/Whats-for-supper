@@ -82,6 +82,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
             onChange={e => setRecipeText(e.target.value)}
           />
           <TextField
+            variant="outlined"
             multiline
             rows="3"
             placeholder="Add information about your recipe here..."

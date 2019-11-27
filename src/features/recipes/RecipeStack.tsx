@@ -4,26 +4,46 @@ import { createSelector } from 'redux-starter-kit'
 
 import RecipeCard from './RecipeCard'
 import { RootState } from '../../app/rootReducer'
-import { selectRecipes, selectIndex } from './recipeSlice'
+import {
+  selectRecipes,
+  selectIndex,
+  selectShowDescription,
+  toggleDescription,
+} from './recipeSlice'
 
 const selectRecipe = createSelector(
   [selectRecipes, selectIndex],
-  (recipes, index) => recipes[index] || { title: 'No available recipes' }
+  (recipes, index) =>
+    recipes[index] || {
+      title: 'No available recipes',
+      description: "Add a recipe with the '+' button on the bottom right.",
+    }
 )
 
 const mapState = (state: RootState) => ({
   recipe: selectRecipe(state),
+  showDescription: selectShowDescription(state),
 })
 
-const mapDispatch = {}
+const mapDispatch = { toggleDescription }
 
 interface OwnProps {}
 
 type Props = ReturnType<typeof mapState> & typeof mapDispatch & OwnProps
 
-const RecipeList: React.FC<Props> = ({ recipe }) => (
+const RecipeList: React.FC<Props> = ({
+  recipe,
+  showDescription,
+  toggleDescription,
+}) => (
   <div>
-    <RecipeCard {...{ recipe }} />
+    <RecipeCard
+      {...{
+        recipe,
+        showDescription,
+        toggleDescription: () => toggleDescription(),
+      }}
+    />
   </div>
 )
 

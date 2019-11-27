@@ -4,17 +4,20 @@ import { createSelector } from 'redux-starter-kit'
 
 export interface Recipe {
   title: string
+  description: string
   image?: string
 }
 
 export interface RecipeListState {
   recipes: Recipe[]
   index: number
+  showDescription: boolean
 }
 
 let initialState: RecipeListState = {
   recipes: [],
   index: 0,
+  showDescription: false,
 }
 
 const recipeSlice = createSlice({
@@ -33,9 +36,11 @@ const recipeSlice = createSlice({
     },
     nextRecipe(state) {
       state.index++
+      state.showDescription = false
     },
     prevRecipe(state) {
       state.index--
+      state.showDescription = false
     },
     makeRecipe(state) {
       // Remove the selected recipe
@@ -45,16 +50,28 @@ const recipeSlice = createSlice({
       state.recipes.push(selected_recipe)
       state.index = 0
     },
+    toggleDescription(state: RecipeListState) {
+      state.showDescription = !state.showDescription
+    },
   },
 })
 
 export const {
-  actions: { addRecipe, removeRecipe, nextRecipe, prevRecipe, makeRecipe },
+  actions: {
+    addRecipe,
+    removeRecipe,
+    nextRecipe,
+    prevRecipe,
+    makeRecipe,
+    toggleDescription,
+  },
   slice,
 } = recipeSlice
 
 export const selectRecipes = (state: RootState) => state[slice].recipes
 export const selectIndex = (state: RootState) => state[slice].index
+export const selectShowDescription = (state: RootState) =>
+  state[slice].showDescription
 
 export const availabilityStateMap = createSelector(
   [selectRecipes, selectIndex],

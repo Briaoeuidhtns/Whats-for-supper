@@ -38,6 +38,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
   const classes = useStyles()
   const [open, setOpen] = useState(false)
   const [recipeText, setRecipeText] = useState('')
+  const [recipeDescription, setRecipeDescription] = useState('')
 
   const submit = () => {
     setOpen(false)
@@ -49,6 +50,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
       image: encodeURI(
         'https://loremflickr.com/400/250/' + recipeText + '?lock=1'
       ),
+      description: recipeDescription,
     })
     cancel()
   }
@@ -56,6 +58,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
   const cancel = () => {
     setOpen(false)
     setRecipeText('')
+    setRecipeDescription('')
   }
 
   return (
@@ -85,6 +88,17 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
             fullWidth
             value={recipeText}
             onChange={e => setRecipeText(e.target.value)}
+          />
+          <TextField
+            variant="outlined"
+            multiline
+            rows="3"
+            placeholder="Add information about your recipe here..."
+            margin="dense"
+            label="Recipe Description"
+            fullWidth
+            value={recipeDescription}
+            onChange={e => setRecipeDescription(e.target.value)}
           />
         </DialogContent>
         <DialogActions>

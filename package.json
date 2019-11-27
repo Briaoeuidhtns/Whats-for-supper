@@ -23,7 +23,7 @@
     "typescript": "3.6.3"
   },
   "devDependencies": {
-    "prettier": "1.18.2"
+    "prettier": "1.19.1"
   },
   "prettier": {
     "proseWrap": "never",
@@ -37,7 +37,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test-junit": "react-scripts test --testResultsProcessor ./node_modules/jest-junit-reporter",
-    "check-format": "prettier -c **/*.{html,md,json,css,{js,ts}{,x}}",
+    "check-format": "prettier -c '**/*.{html,md,json,css,{js,ts}{,x}}'",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

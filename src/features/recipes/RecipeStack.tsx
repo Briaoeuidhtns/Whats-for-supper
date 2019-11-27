@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import RecipeCard from './RecipeCard'
 import { createSelector } from 'redux-starter-kit'
+
+import RecipeCard from './RecipeCard'
 import { RootState } from '../../app/rootReducer'
 import {
   selectRecipes,
@@ -46,7 +47,4 @@ const RecipeList: React.FC<Props> = ({
   </div>
 )
 
-export default connect(
-  mapState,
-  mapDispatch
-)(RecipeList)
+export default connect(mapState, mapDispatch)(RecipeList)

@@ -1,13 +1,23 @@
 import React from 'react'
+
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardMedia,
+  Typography,
+  Collapse,
+  IconButton,
+} from '@material-ui/core'
+
+import { makeStyles } from '@material-ui/core/styles'
+
+import {
+  ExpandMore as ExpandMoreIcon,
+  ExpandLess as ExpandLessIcon,
+} from '@material-ui/icons'
+
 import { Recipe } from './recipeSlice'
-import Card from '@material-ui/core/Card'
-import IconButton from '@material-ui/core/IconButton'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import ExpandLessIcon from '@material-ui/icons/ExpandLess'
-import CardHeader from '@material-ui/core/CardHeader'
-import CardContent from '@material-ui/core/CardContent'
-import Typography from '@material-ui/core/Typography'
-import { Collapse } from '@material-ui/core'
 
 interface IconProps {
   expand: boolean
@@ -15,6 +25,16 @@ interface IconProps {
 
 const ExpandableIcon: React.FC<IconProps> = ({ expand }) =>
   expand ? <ExpandLessIcon /> : <ExpandMoreIcon />
+
+// A single pixel gif
+const defaultPlaceholder =
+  'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='
+
+const useStyles = makeStyles({
+  media: {
+    height: 250,
+  },
+})
 
 interface OwnProps {
   recipe: Recipe
@@ -31,8 +51,13 @@ const RecipeCard: React.FC<Props> = ({
   showDescription,
   toggleDescription,
 }) => {
+  const classes = useStyles()
   return (
     <Card>
+      <CardMedia
+        className={classes.media}
+        image={recipe.image || placeholder || defaultPlaceholder}
+      ></CardMedia>
       <CardHeader title={recipe.title} />
       <IconButton onClick={toggleDescription}>
         <ExpandableIcon expand={showDescription} />

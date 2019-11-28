@@ -12,6 +12,7 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
+  Typography,
 } from '@material-ui/core'
 import { Add as AddIcon, Remove as RemoveIcon } from '@material-ui/icons'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
@@ -32,6 +33,14 @@ const useStyles = makeStyles((theme: Theme) =>
       bottom: theme.spacing(2),
       right: theme.spacing(2),
     },
+    fieldset: {
+      borderColor: 'transparent',
+      marginLeft: 0,
+      paddingLeft: 0,
+    },
+    legend: {
+      pointerEvents: 'none',
+    },
   })
 )
 
@@ -40,6 +49,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
   const [open, setOpen] = useState(false)
   const [recipeText, setRecipeText] = useState('')
   const [recipeRating, setRecipeRating] = useState<number | undefined>()
+  const [recipeDescription, setRecipeDescription] = useState('')
 
   const submit = () => {
     setOpen(false)
@@ -52,6 +62,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
         'https://loremflickr.com/400/250/' + recipeText + '?lock=1'
       ),
       rating: recipeRating,
+      description: recipeDescription,
     })
     cancel()
   }
@@ -60,6 +71,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
     setOpen(false)
     setRecipeText('')
     setRecipeRating(undefined)
+    setRecipeDescription('')
   }
 
   return (
@@ -81,26 +93,46 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
       >
         <DialogTitle>Add a recipe</DialogTitle>
         <DialogContent>
-          <div>
-            <DialogContentText>Add your recipe information</DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              label="Recipe Title"
-              fullWidth
-              value={recipeText}
-              onChange={e => setRecipeText(e.target.value)}
-            />
-          </div>
-          <div>
-            <DialogContentText> How would you rate this? </DialogContentText>
+          <DialogContentText>Add your recipe information</DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Recipe Title"
+            fullWidth
+            value={recipeText}
+            onChange={e => setRecipeText(e.target.value)}
+          />
+          <TextField
+            variant="outlined"
+            multiline
+            rows="3"
+            placeholder="Add information about your recipe here..."
+            margin="dense"
+            label="Recipe Description"
+            fullWidth
+            value={recipeDescription}
+            onChange={e => setRecipeDescription(e.target.value)}
+          />
+          <Box
+            component="fieldset"
+            borderColor="transparent"
+            className={classes.fieldset}
+          >
+            <Typography
+              component="legend"
+              className={classes.legend}
+              color="textSecondary"
+            >
+              How would you rate this?
+            </Typography>
             <Rating
+              id="rating"
               name="size-large"
               size="large"
               value={recipeRating || null}
-              onChange={(event, newValue) => setRecipeRating(newValue)}
+              onChange={(_, newValue) => setRecipeRating(newValue)}
             />
-          </div>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={cancel} color="primary">

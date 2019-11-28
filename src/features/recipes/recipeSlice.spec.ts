@@ -7,11 +7,23 @@ import recipeReducer, {
   removeRecipe,
   makeRecipe,
   availabilityStateMap,
+  toggleDescription,
 } from './recipeSlice'
 
-const dummyRecipe: Recipe = { title: 'Dummy Recipe', rating: 3 },
-  dummyRecipe2: Recipe = { title: 'Dummy Recipe 2' },
-  dummyRecipe3: Recipe = { title: 'Dummy Recipe 3', rating: 5 }
+const dummyRecipe: Recipe = {
+    title: 'Dummy Recipe',
+    description: 'Dummy Recipe Description',
+    rating: 3,
+  },
+  dummyRecipe2: Recipe = {
+    title: 'Dummy Recipe 2',
+    description: 'Dummy Recipe 2 Description',
+  },
+  dummyRecipe3: Recipe = {
+    title: 'Dummy Recipe 3',
+    description: 'Dummy Recipe 3 Description',
+    rating: 5,
+  }
 
 describe('recipe reducer', () => {
   it('should handle prevRecipe', () => {
@@ -20,12 +32,14 @@ describe('recipe reducer', () => {
         {
           recipes: [dummyRecipe, dummyRecipe],
           index: 1,
+          showDescription: false,
         },
         { type: prevRecipe.type }
       )
     ).toEqual({
       recipes: [dummyRecipe, dummyRecipe],
       index: 0,
+      showDescription: false,
     })
   })
 
@@ -35,12 +49,14 @@ describe('recipe reducer', () => {
         {
           recipes: [dummyRecipe, dummyRecipe],
           index: 0,
+          showDescription: false,
         },
         { type: nextRecipe.type }
       )
     ).toEqual({
       recipes: [dummyRecipe, dummyRecipe],
       index: 1,
+      showDescription: false,
     })
   })
 
@@ -50,12 +66,14 @@ describe('recipe reducer', () => {
         {
           recipes: [],
           index: 0,
+          showDescription: false,
         },
         { type: addRecipe.type, payload: dummyRecipe }
       )
     ).toEqual({
       recipes: [dummyRecipe],
       index: 0,
+      showDescription: false,
     })
 
     expect(
@@ -63,12 +81,14 @@ describe('recipe reducer', () => {
         {
           recipes: [dummyRecipe],
           index: 0,
+          showDescription: false,
         },
         { type: addRecipe.type, payload: dummyRecipe2 }
       )
     ).toEqual({
       recipes: [dummyRecipe, dummyRecipe2],
       index: 0,
+      showDescription: false,
     })
   })
 
@@ -78,12 +98,14 @@ describe('recipe reducer', () => {
         {
           recipes: [dummyRecipe],
           index: 0,
+          showDescription: false,
         },
         { type: removeRecipe.type }
       )
     ).toEqual({
       recipes: [],
       index: 0,
+      showDescription: false,
     })
 
     expect(
@@ -91,12 +113,14 @@ describe('recipe reducer', () => {
         {
           recipes: [dummyRecipe, dummyRecipe2],
           index: 1,
+          showDescription: false,
         },
         { type: removeRecipe.type }
       )
     ).toEqual({
       recipes: [dummyRecipe],
       index: 0,
+      showDescription: false,
     })
   })
 
@@ -106,12 +130,14 @@ describe('recipe reducer', () => {
         {
           recipes: [dummyRecipe, dummyRecipe2],
           index: 0,
+          showDescription: false,
         },
         { type: makeRecipe.type }
       )
     ).toEqual({
       recipes: [dummyRecipe2, dummyRecipe],
       index: 0,
+      showDescription: false,
     })
 
     expect(
@@ -119,12 +145,14 @@ describe('recipe reducer', () => {
         {
           recipes: [dummyRecipe, dummyRecipe2],
           index: 1,
+          showDescription: false,
         },
         { type: makeRecipe.type }
       )
     ).toEqual({
       recipes: [dummyRecipe, dummyRecipe2],
       index: 0,
+      showDescription: false,
     })
   })
 
@@ -133,12 +161,31 @@ describe('recipe reducer', () => {
       {
         recipes: [dummyRecipe, dummyRecipe2, dummyRecipe3],
         index: 1,
+        showDescription: false,
       },
       { type: makeRecipe.type }
     )
   ).toEqual({
     recipes: [dummyRecipe, dummyRecipe3, dummyRecipe2],
     index: 0,
+    showDescription: false,
+  })
+
+  it('should show the description on toggle', () => {
+    expect(
+      recipeReducer(
+        {
+          recipes: [dummyRecipe, dummyRecipe2, dummyRecipe3],
+          index: 0,
+          showDescription: false,
+        },
+        { type: toggleDescription.type }
+      )
+    ).toEqual({
+      recipes: [dummyRecipe, dummyRecipe2, dummyRecipe3],
+      index: 0,
+      showDescription: true,
+    })
   })
 })
 
@@ -146,7 +193,7 @@ describe('avaliability state map', () => {
   it('describes recipe availability', () => {
     expect(
       availabilityStateMap({
-        [slice]: { recipes: [], index: 0 },
+        [slice]: { recipes: [], index: 0, showDescription: false },
       })
     ).toEqual({
       hasPrev: false,
@@ -156,7 +203,7 @@ describe('avaliability state map', () => {
 
     expect(
       availabilityStateMap({
-        [slice]: { recipes: [dummyRecipe], index: 0 },
+        [slice]: { recipes: [dummyRecipe], index: 0, showDescription: false },
       })
     ).toEqual({
       hasPrev: false,
@@ -166,7 +213,11 @@ describe('avaliability state map', () => {
 
     expect(
       availabilityStateMap({
-        [slice]: { recipes: [dummyRecipe, dummyRecipe], index: 0 },
+        [slice]: {
+          recipes: [dummyRecipe, dummyRecipe],
+          index: 0,
+          showDescription: false,
+        },
       })
     ).toEqual({
       hasPrev: false,
@@ -176,7 +227,11 @@ describe('avaliability state map', () => {
 
     expect(
       availabilityStateMap({
-        [slice]: { recipes: [dummyRecipe, dummyRecipe], index: 1 },
+        [slice]: {
+          recipes: [dummyRecipe, dummyRecipe],
+          index: 1,
+          showDescription: false,
+        },
       })
     ).toEqual({
       hasPrev: true,

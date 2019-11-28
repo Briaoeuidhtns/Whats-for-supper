@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core'
 
 import { makeStyles } from '@material-ui/core/styles'
+import { Rating } from '@material-ui/lab'
 
 import {
   ExpandMore as ExpandMoreIcon,
@@ -59,6 +60,7 @@ const RecipeCard: React.FC<Props> = ({
         image={recipe.image || placeholder || defaultPlaceholder}
       ></CardMedia>
       <CardHeader title={recipe.title} />
+      <Rating name="recipeRating" value={recipe.rating || null} readOnly />
       <IconButton onClick={toggleDescription}>
         <ExpandableIcon expand={showDescription} />
       </IconButton>

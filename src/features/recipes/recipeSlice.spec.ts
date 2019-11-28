@@ -13,6 +13,7 @@ import recipeReducer, {
 const dummyRecipe: Recipe = {
     title: 'Dummy Recipe',
     description: 'Dummy Recipe Description',
+    rating: 3,
   },
   dummyRecipe2: Recipe = {
     title: 'Dummy Recipe 2',
@@ -21,6 +22,7 @@ const dummyRecipe: Recipe = {
   dummyRecipe3: Recipe = {
     title: 'Dummy Recipe 3',
     description: 'Dummy Recipe 3 Description',
+    rating: 5,
   }
 
 describe('recipe reducer', () => {

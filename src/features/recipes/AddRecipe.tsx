@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
+import { Rating } from '@material-ui/lab'
 
 import {
   TextField,
@@ -11,6 +12,7 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
+  Typography,
 } from '@material-ui/core'
 import { Add as AddIcon, Remove as RemoveIcon } from '@material-ui/icons'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
@@ -31,6 +33,14 @@ const useStyles = makeStyles((theme: Theme) =>
       bottom: theme.spacing(2),
       right: theme.spacing(2),
     },
+    fieldset: {
+      borderColor: 'transparent',
+      marginLeft: 0,
+      paddingLeft: 0,
+    },
+    legend: {
+      pointerEvents: 'none',
+    },
   })
 )
 
@@ -38,6 +48,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
   const classes = useStyles()
   const [open, setOpen] = useState(false)
   const [recipeText, setRecipeText] = useState('')
+  const [recipeRating, setRecipeRating] = useState<number | undefined>()
   const [recipeDescription, setRecipeDescription] = useState('')
 
   const submit = () => {
@@ -50,6 +61,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
       image: encodeURI(
         'https://loremflickr.com/400/250/' + recipeText + '?lock=1'
       ),
+      rating: recipeRating,
       description: recipeDescription,
     })
     cancel()
@@ -58,6 +70,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
   const cancel = () => {
     setOpen(false)
     setRecipeText('')
+    setRecipeRating(undefined)
     setRecipeDescription('')
   }
 
@@ -100,6 +113,26 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
             value={recipeDescription}
             onChange={e => setRecipeDescription(e.target.value)}
           />
+          <Box
+            component="fieldset"
+            borderColor="transparent"
+            className={classes.fieldset}
+          >
+            <Typography
+              component="legend"
+              className={classes.legend}
+              color="textSecondary"
+            >
+              How would you rate this?
+            </Typography>
+            <Rating
+              id="rating"
+              name="size-large"
+              size="large"
+              value={recipeRating || null}
+              onChange={(_, newValue) => setRecipeRating(newValue)}
+            />
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={cancel} color="primary">

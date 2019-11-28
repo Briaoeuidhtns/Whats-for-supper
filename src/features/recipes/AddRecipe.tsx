@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import Rating from '@material-ui/lab/Rating'
+import { Rating } from '@material-ui/lab'
 
 import {
   TextField,
@@ -39,7 +39,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
   const classes = useStyles()
   const [open, setOpen] = useState(false)
   const [recipeText, setRecipeText] = useState('')
-  const [ratingText, setRecipeRating] = useState()
+  const [recipeRating, setRecipeRating] = useState<number | undefined>()
 
   const submit = () => {
     setOpen(false)
@@ -51,7 +51,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
       image: encodeURI(
         'https://loremflickr.com/400/250/' + recipeText + '?lock=1'
       ),
-      rating: ratingText,
+      rating: recipeRating,
     })
     cancel()
   }
@@ -59,7 +59,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
   const cancel = () => {
     setOpen(false)
     setRecipeText('')
-    setRecipeRating(0)
+    setRecipeRating(undefined)
   }
 
   return (
@@ -97,7 +97,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
             <Rating
               name="size-large"
               size="large"
-              value={ratingText}
+              value={recipeRating || null}
               onChange={(event, newValue) => setRecipeRating(newValue)}
             />
           </div>

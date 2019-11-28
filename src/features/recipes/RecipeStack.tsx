@@ -8,8 +8,7 @@ import { selectRecipes, selectIndex } from './recipeSlice'
 
 const selectRecipe = createSelector(
   [selectRecipes, selectIndex],
-  (recipes, index) =>
-    recipes[index] || { title: 'No available recipes', Rating: 'n/a' }
+  (recipes, index) => recipes[index] || { title: 'No available recipes' }
 )
 
 const mapState = (state: RootState) => ({

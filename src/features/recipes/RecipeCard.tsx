@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Card, CardHeader, CardContent, CardMedia } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import Rating from '@material-ui/lab/Rating'
+import { Rating } from '@material-ui/lab'
 import { Recipe } from './recipeSlice'
 
 // A single pixel gif
@@ -32,7 +32,7 @@ const RecipeCard: React.FC<Props> = ({ recipe, placeholder }) => {
       ></CardMedia>
       <CardHeader title={recipe.title} />
       <CardContent>
-        <Rating name="disabled" value={recipe.rating} disabled />
+        <Rating name="recipeRating" value={recipe.rating || null} readOnly />
       </CardContent>
     </Card>
   )

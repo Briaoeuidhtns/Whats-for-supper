@@ -17,7 +17,6 @@ import { Rating } from '@material-ui/lab'
 import {
   ExpandMore as ExpandMoreIcon,
   ExpandLess as ExpandLessIcon,
-  MoreVert as MenuIcon,
 } from '@material-ui/icons'
 
 import { Recipe } from './recipeSlice'
@@ -48,7 +47,7 @@ interface OwnProps {
   placeholder?: string
   showDescription: boolean
   toggleDescription: React.MouseEventHandler<HTMLButtonElement>
-  onMenuOpen?: React.MouseEventHandler
+  menuButton?: React.ReactNode
 }
 
 type Props = OwnProps
@@ -58,7 +57,7 @@ const RecipeCard: React.FC<Props> = ({
   placeholder,
   showDescription,
   toggleDescription,
-  onMenuOpen,
+  menuButton,
 }) => {
   const classes = useStyles()
 
@@ -69,14 +68,7 @@ const RecipeCard: React.FC<Props> = ({
         image={recipe.image || placeholder || defaultPlaceholder}
       />
 
-      <CardHeader
-        title={recipe.title}
-        action={
-          <IconButton onClick={onMenuOpen}>
-            <MenuIcon />
-          </IconButton>
-        }
-      />
+      <CardHeader title={recipe.title} action={menuButton} />
 
       <CardContent>
         <Rating name="recipeRating" value={recipe.rating || null} readOnly />

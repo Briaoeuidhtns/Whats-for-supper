@@ -23,8 +23,9 @@ const store = configureStore({
   }),
 })
 
+const shuffleSalt = Date.now()
 const persistor = persistStore(store, null, () => {
-  store.dispatch(shuffleRecipes())
+  store.dispatch(shuffleRecipes(shuffleSalt))
 })
 
 if (process.env.NODE_ENV === 'development' && module.hot) {

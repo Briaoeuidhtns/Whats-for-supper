@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Rating } from '@material-ui/lab'
+import { createSelector } from 'reselect'
 
 import {
   TextField,
@@ -17,14 +18,19 @@ import {
 import { Add as AddIcon, Remove as RemoveIcon } from '@material-ui/icons'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 
-import { addRecipe, removeRecipe, availabilityStateMap } from './recipeSlice'
+import { addRecipe, removeRecipe } from './recipeSlice'
+import { availabilityStateMap, selectIndex } from './uiSlice'
 
 const mapDispatch = { addRecipe, removeRecipe }
+
 interface OwnProps {}
 
-type Props = ReturnType<typeof availabilityStateMap> &
-  typeof mapDispatch &
-  OwnProps
+const mapState = createSelector(
+  [availabilityStateMap, selectIndex],
+  (has, index) => ({ ...has, index })
+)
+
+type Props = typeof mapDispatch & ReturnType<typeof mapState> & OwnProps
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,7 +50,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
+const AddRecipeDialog: React.FC<Props> = ({
+  addRecipe,
+  removeRecipe,
+  has,
+  index: current,
+}) => {
   const classes = useStyles()
   const [open, setOpen] = useState(false)
   const [recipeText, setRecipeText] = useState('')
@@ -81,7 +92,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
           <AddIcon />
         </Fab>
         {has && (
-          <Fab onClick={() => removeRecipe()}>
+          <Fab onClick={() => removeRecipe(current)}>
             <RemoveIcon />
           </Fab>
         )}
@@ -147,4 +158,4 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe, removeRecipe, has }) => {
   )
 }
 
-export default connect(availabilityStateMap, mapDispatch)(AddRecipeDialog)
+export default connect(mapState, mapDispatch)(AddRecipeDialog)

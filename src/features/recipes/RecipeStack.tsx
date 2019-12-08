@@ -4,12 +4,12 @@ import { createSelector } from 'redux-starter-kit'
 
 import RecipeCard from './RecipeCard'
 import { RootState } from '../../app/rootReducer'
+import { selectRecipes } from './recipeSlice'
 import {
-  selectRecipes,
   selectIndex,
   selectShowDescription,
   toggleDescription,
-} from './recipeSlice'
+} from './uiSlice'
 
 const selectRecipe = createSelector(
   [selectRecipes, selectIndex],

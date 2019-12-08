@@ -1,6 +1,6 @@
-import { createSlice } from 'redux-starter-kit'
+import { createSlice, PayloadAction } from 'redux-starter-kit'
 import { RootState } from '../../app/rootReducer'
-import { createSelector } from 'redux-starter-kit'
+import { sha1 as hash } from 'hash.js'
 
 export interface Recipe {
   title: string
@@ -11,76 +11,59 @@ export interface Recipe {
 
 export interface RecipeListState {
   recipes: Recipe[]
-  index: number
-  showDescription: boolean
 }
 
 let initialState: RecipeListState = {
   recipes: [],
-  index: 0,
-  showDescription: false,
+}
+
+// To the best of my knowledge, this generates a normalish distribution
+const keyfn = (val: Recipe, salt: any) => {
+  const variance = 15
+  const [...h] = hash()
+    .update(JSON.stringify({ val, salt }))
+    .digest('hex')
+
+  const shift =
+    (h.map(a => parseInt(a, 16)).reduce((a, b) => a + b) -
+      (15 * h.length) / 2) / // Shift center to 0
+    variance // Shrink the range
+
+  return shift
 }
 
 const recipeSlice = createSlice({
   slice: 'recipes',
   initialState,
   reducers: {
-    addRecipe(
-      state: RecipeListState,
-      { payload: recipe }: { payload: Recipe }
-    ) {
+    addRecipe(state, { payload: recipe }: PayloadAction<Recipe>) {
       state.recipes.push(recipe)
     },
-    removeRecipe(state: RecipeListState) {
-      state.recipes.splice(state.index, 1)
-      state.index = Math.max(state.index - 1, 0)
+    removeRecipe(state, { payload: index }: PayloadAction<number>) {
+      state.recipes.splice(index, 1)
     },
-    nextRecipe(state) {
-      state.index++
-      state.showDescription = false
-    },
-    prevRecipe(state) {
-      state.index--
-      state.showDescription = false
-    },
-    makeRecipe(state) {
-      // Remove the selected recipe
-      const selected_recipe = state.recipes.splice(state.index, 1)[0]
+    makeRecipe(state, { payload: index }: PayloadAction<number>) {
+      const selected_recipe = state.recipes.splice(index, 1)[0]
 
       // Add it as the last recipe
       state.recipes.push(selected_recipe)
-      state.index = 0
     },
-    toggleDescription(state: RecipeListState) {
-      state.showDescription = !state.showDescription
+    shuffleRecipes(state, { payload: salt }: PayloadAction<any>) {
+      state.recipes.sort(
+        (a, b) =>
+          keyfn(b, salt) + (b.rating || 0) - (keyfn(a, salt) + (a.rating || 0))
+      )
     },
   },
 })
 
 export const {
-  actions: {
-    addRecipe,
-    removeRecipe,
-    nextRecipe,
-    prevRecipe,
-    makeRecipe,
-    toggleDescription,
-  },
-  slice,
-} = recipeSlice
+  addRecipe,
+  removeRecipe,
+  makeRecipe,
+  shuffleRecipes,
+} = recipeSlice.actions
 
-export const selectRecipes = (state: RootState) => state[slice].recipes
-export const selectIndex = (state: RootState) => state[slice].index
-export const selectShowDescription = (state: RootState) =>
-  state[slice].showDescription
-
-export const availabilityStateMap = createSelector(
-  [selectRecipes, selectIndex],
-  (recipes, index) => ({
-    hasPrev: index > 0,
-    has: index < recipes.length,
-    hasNext: index < recipes.length - 1,
-  })
-)
+export const selectRecipes = (state: RootState) => state.recipes.recipes
 
 export default recipeSlice.reducer

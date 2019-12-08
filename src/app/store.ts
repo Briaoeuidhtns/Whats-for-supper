@@ -3,8 +3,9 @@ import { persistStore, persistReducer } from 'redux-persist'
 import rootReducer from './rootReducer'
 import storage from 'redux-persist/lib/storage'
 import { PERSIST } from 'redux-persist/lib/constants'
+import { shuffleRecipes } from '../features/recipes/recipeSlice'
 
-const persistConfig = { key: 'root', storage }
+const persistConfig = { key: 'root', storage, whitelist: ['recipes'] }
 
 const store = configureStore({
   reducer: persistReducer(persistConfig, rootReducer),
@@ -22,7 +23,9 @@ const store = configureStore({
   }),
 })
 
-const persistor = persistStore(store)
+const persistor = persistStore(store, null, () => {
+  store.dispatch(shuffleRecipes())
+})
 
 if (process.env.NODE_ENV === 'development' && module.hot) {
   module.hot.accept('./rootReducer', () => {

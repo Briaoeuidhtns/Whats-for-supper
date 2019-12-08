@@ -10,17 +10,23 @@ import {
 import {
   nextRecipe,
   prevRecipe,
-  makeRecipe,
   availabilityStateMap,
-} from './recipeSlice'
+  selectIndex,
+} from './uiSlice'
+
+import { makeRecipe } from './recipeSlice'
+import { createSelector } from 'redux-starter-kit'
+
+const mapState = createSelector(
+  [availabilityStateMap, selectIndex],
+  (has, index) => ({ ...has, index })
+)
 
 const mapDispatch = { nextRecipe, prevRecipe, makeRecipe }
 
 interface OwnProps {}
 
-type Props = ReturnType<typeof availabilityStateMap> &
-  typeof mapDispatch &
-  OwnProps
+type Props = ReturnType<typeof mapState> & typeof mapDispatch & OwnProps
 
 const Reactions: React.FC<Props> = ({
   nextRecipe,
@@ -29,6 +35,7 @@ const Reactions: React.FC<Props> = ({
   hasPrev,
   has,
   hasNext,
+  index: current,
 }) => (
   <ButtonGroup color="primary" variant="contained" fullWidth>
     <Button onClick={() => prevRecipe()} disabled={!hasPrev}>
@@ -36,7 +43,7 @@ const Reactions: React.FC<Props> = ({
       Previous
     </Button>
 
-    <Button onClick={() => makeRecipe()} disabled={!has}>
+    <Button onClick={() => makeRecipe(current)} disabled={!has}>
       Select
     </Button>
 
@@ -47,4 +54,4 @@ const Reactions: React.FC<Props> = ({
   </ButtonGroup>
 )
 
-export default connect(availabilityStateMap, mapDispatch)(Reactions)
+export default connect(mapState, mapDispatch)(Reactions)

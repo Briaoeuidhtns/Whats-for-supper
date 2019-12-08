@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import {
   Card,
@@ -9,9 +9,6 @@ import {
   Collapse,
   IconButton,
   CardActions,
-  Menu,
-  MenuItem,
-  ListItemIcon,
 } from '@material-ui/core'
 
 import { makeStyles } from '@material-ui/core/styles'

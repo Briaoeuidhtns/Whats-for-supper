@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import {
   Card,
@@ -8,6 +8,10 @@ import {
   Typography,
   Collapse,
   IconButton,
+  CardActions,
+  Menu,
+  MenuItem,
+  ListItemIcon,
 } from '@material-ui/core'
 
 import { makeStyles } from '@material-ui/core/styles'
@@ -16,6 +20,7 @@ import { Rating } from '@material-ui/lab'
 import {
   ExpandMore as ExpandMoreIcon,
   ExpandLess as ExpandLessIcon,
+  MoreVert as MenuIcon,
 } from '@material-ui/icons'
 
 import { Recipe } from './recipeSlice'
@@ -33,7 +38,11 @@ const defaultPlaceholder =
 
 const useStyles = makeStyles({
   media: {
-    height: 250,
+    height: 0,
+    paddingTop: '56.25%', // 16:9
+  },
+  expand: {
+    marginLeft: 'auto',
   },
 })
 
@@ -42,6 +51,7 @@ interface OwnProps {
   placeholder?: string
   showDescription: boolean
   toggleDescription: React.MouseEventHandler<HTMLButtonElement>
+  onMenuOpen?: React.MouseEventHandler
 }
 
 type Props = OwnProps
@@ -51,22 +61,47 @@ const RecipeCard: React.FC<Props> = ({
   placeholder,
   showDescription,
   toggleDescription,
+  onMenuOpen,
 }) => {
   const classes = useStyles()
+
   return (
     <Card>
       <CardMedia
         className={classes.media}
         image={recipe.image || placeholder || defaultPlaceholder}
-      ></CardMedia>
-      <CardHeader title={recipe.title} />
-      <Rating name="recipeRating" value={recipe.rating || null} readOnly />
-      <IconButton onClick={toggleDescription}>
-        <ExpandableIcon expand={showDescription} />
-      </IconButton>
-      <Collapse in={showDescription} timeout="auto" unmountOnExit>
+      />
+
+      <CardHeader
+        title={recipe.title}
+        action={
+          <IconButton onClick={onMenuOpen}>
+            <MenuIcon />
+          </IconButton>
+        }
+      />
+
+      <CardContent>
+        <Rating name="recipeRating" value={recipe.rating || null} readOnly />
+      </CardContent>
+
+      <CardActions>
+        <IconButton
+          className={classes.expand}
+          onClick={toggleDescription}
+          disabled={!recipe.description}
+        >
+          <ExpandableIcon expand={showDescription} />
+        </IconButton>
+      </CardActions>
+
+      <Collapse
+        in={showDescription && !!recipe.description}
+        timeout="auto"
+        unmountOnExit
+      >
         <CardContent>
-          <Typography variant="body2" color="textSecondary" component="p">
+          <Typography paragraph variant="body2" color="textSecondary">
             {recipe.description}
           </Typography>
         </CardContent>

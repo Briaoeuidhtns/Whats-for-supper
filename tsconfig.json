@@ -14,7 +14,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "sourceMap": true,
+    "inlineSources": true,
+    "sourceRoot": "/"
   },
   "include": ["src"]
 }

@@ -1,15 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { createSelector } from 'redux-starter-kit'
 
 import RecipeCard from './RecipeCard'
-import { RootState } from '../../app/rootReducer'
-import { selectRecipes } from './recipeSlice'
+import { selectRecipes, removeRecipe } from './recipeSlice'
 import {
   selectIndex,
   selectShowDescription,
   toggleDescription,
+  availabilityStateMap,
 } from './uiSlice'
+import { Menu, MenuItem, ListItemIcon, IconButton } from '@material-ui/core'
+import { Delete as DeleteIcon, MoreVert as MenuIcon } from '@material-ui/icons'
 
 const selectRecipe = createSelector(
   [selectRecipes, selectIndex],
@@ -20,12 +22,17 @@ const selectRecipe = createSelector(
     }
 )
 
-const mapState = (state: RootState) => ({
-  recipe: selectRecipe(state),
-  showDescription: selectShowDescription(state),
-})
+const mapState = createSelector(
+  [selectRecipe, selectShowDescription, selectIndex, availabilityStateMap],
+  (recipe, showDescription, currentRecipe, { has }) => ({
+    recipe,
+    showDescription,
+    currentRecipe,
+    has,
+  })
+)
 
-const mapDispatch = { toggleDescription }
+const mapDispatch = { toggleDescription, removeRecipe }
 
 interface OwnProps {}
 
@@ -35,16 +42,48 @@ const RecipeList: React.FC<Props> = ({
   recipe,
   showDescription,
   toggleDescription,
-}) => (
-  <div>
-    <RecipeCard
-      {...{
-        recipe,
-        showDescription,
-        toggleDescription: () => toggleDescription(),
-      }}
-    />
-  </div>
-)
+  removeRecipe,
+  currentRecipe,
+  has,
+}) => {
+  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null)
+  const closeMenu = () => setMenuAnchor(null)
+
+  return (
+    <>
+      <Menu anchorEl={menuAnchor} open={!!menuAnchor} onClose={closeMenu}>
+        <MenuItem
+          onClick={() => {
+            closeMenu()
+            removeRecipe(currentRecipe)
+          }}
+        >
+          <ListItemIcon>
+            <DeleteIcon />
+          </ListItemIcon>
+          Delete
+        </MenuItem>
+      </Menu>
+
+      <div>
+        <RecipeCard
+          {...{
+            recipe,
+            showDescription,
+            toggleDescription: () => toggleDescription(),
+            menuButton: (
+              <IconButton
+                onClick={e => setMenuAnchor(e.currentTarget)}
+                disabled={!has}
+              >
+                <MenuIcon />
+              </IconButton>
+            ),
+          }}
+        />
+      </div>
+    </>
+  )
+}
 
 export default connect(mapState, mapDispatch)(RecipeList)

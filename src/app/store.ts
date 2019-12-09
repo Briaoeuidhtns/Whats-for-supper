@@ -1,4 +1,9 @@
-import { configureStore, getDefaultMiddleware } from 'redux-starter-kit'
+import * as Sentry from '@sentry/browser'
+import {
+  configureStore,
+  getDefaultMiddleware,
+  Middleware,
+} from 'redux-starter-kit'
 import { persistStore, persistReducer } from 'redux-persist'
 import rootReducer from './rootReducer'
 import storage from 'redux-persist/lib/storage'
@@ -7,20 +12,38 @@ import { shuffleRecipes } from '../features/recipes/recipeSlice'
 
 const persistConfig = { key: 'root', storage, whitelist: ['recipes'] }
 
+const sentryReporter: Middleware = store => next => action => {
+  Sentry.addBreadcrumb({
+    level: Sentry.Severity.Info,
+    message: 'Dispatched action',
+    data: { ...action },
+  })
+  try {
+    return next(action)
+  } catch (error) {
+    Sentry.setExtras({ state: store.getState(), action })
+    Sentry.captureException(error)
+    throw error
+  }
+}
+
 const store = configureStore({
   reducer: persistReducer(persistConfig, rootReducer),
   devTools: process.env.NODE_ENV !== 'production',
-  middleware: getDefaultMiddleware({
-    serializableCheck: {
-      ignoredActions: [
-        // redux-persist uses non serializable functions in the PERSIST action
-        // This isn't great practice, but it's pretty harmless
-        // Only disable their action to keep checking for our own
-        // https://github.com/rt2zz/redux-persist/issues/988
-        PERSIST,
-      ],
-    },
-  }),
+  middleware: [
+    sentryReporter,
+    ...getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [
+          // redux-persist uses non serializable functions in the PERSIST action
+          // This isn't great practice, but it's pretty harmless
+          // Only disable their action to keep checking for our own
+          // https://github.com/rt2zz/redux-persist/issues/988
+          PERSIST,
+        ],
+      },
+    }),
+  ],
 })
 
 const shuffleSalt = Date.now()

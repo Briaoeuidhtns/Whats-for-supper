@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from 'redux-starter-kit'
 import { RootState } from '../../app/rootReducer'
 import { sha1 as hash } from 'hash.js'
+import InitialRecipes from '../../recipes'
 
 export interface Recipe {
   title: string
@@ -14,7 +15,7 @@ export interface RecipeListState {
 }
 
 let initialState: RecipeListState = {
-  recipes: [],
+  recipes: InitialRecipes,
 }
 
 // To the best of my knowledge, this generates a normalish distribution

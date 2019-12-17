@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { createSelector } from 'redux-starter-kit'
+import { createSelector } from '@reduxjs/toolkit'
 
 import RecipeCard from './RecipeCard'
 import { selectRecipes, removeRecipe } from './recipeSlice'
@@ -16,7 +16,7 @@ import { Delete as DeleteIcon, MoreVert as MenuIcon } from '@material-ui/icons'
 const selectRecipe = createSelector(
   [selectRecipes, selectIndex],
   (recipes, index) =>
-    recipes[index] || {
+    recipes[index] ?? {
       title: 'No available recipes',
       description: "Add a recipe with the '+' button on the bottom right.",
     }

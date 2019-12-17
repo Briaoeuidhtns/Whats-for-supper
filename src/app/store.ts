@@ -3,7 +3,7 @@ import {
   configureStore,
   getDefaultMiddleware,
   Middleware,
-} from 'redux-starter-kit'
+} from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from 'redux-persist'
 import rootReducer from './rootReducer'
 import storage from 'redux-persist/lib/storage'

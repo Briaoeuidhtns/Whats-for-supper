@@ -1,6 +1,6 @@
-import { createSlice } from 'redux-starter-kit'
+import { createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../../app/rootReducer'
-import { createSelector } from 'redux-starter-kit'
+import { createSelector } from '@reduxjs/toolkit'
 import {
   selectRecipes,
   makeRecipe,
@@ -19,7 +19,7 @@ let initialState: RecipeUiState = {
 }
 
 const recipeSlice = createSlice({
-  slice: 'ui',
+  name: 'ui',
   initialState,
   reducers: {
     nextRecipe(state) {

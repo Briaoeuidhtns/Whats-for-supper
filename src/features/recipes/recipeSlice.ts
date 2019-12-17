@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from 'redux-starter-kit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '../../app/rootReducer'
 import { sha1 as hash } from 'hash.js'
 import InitialRecipes from '../../recipes'
@@ -34,7 +34,7 @@ const keyfn = (val: Recipe, salt: any) => {
 }
 
 const recipeSlice = createSlice({
-  slice: 'recipes',
+  name: 'recipes',
   initialState,
   reducers: {
     addRecipe(state, { payload: recipe }: PayloadAction<Recipe>) {
@@ -52,7 +52,7 @@ const recipeSlice = createSlice({
     shuffleRecipes(state, { payload: salt }: PayloadAction<any>) {
       state.recipes.sort(
         (a, b) =>
-          keyfn(b, salt) + (b.rating || 0) - (keyfn(a, salt) + (a.rating || 0))
+          keyfn(b, salt) + (b.rating ?? 0) - (keyfn(a, salt) + (a.rating ?? 0))
       )
     },
   },

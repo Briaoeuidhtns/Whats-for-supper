@@ -15,7 +15,7 @@ import {
 } from './uiSlice'
 
 import { makeRecipe } from './recipeSlice'
-import { createSelector } from 'redux-starter-kit'
+import { createSelector } from '@reduxjs/toolkit'
 
 const mapState = createSelector(
   [availabilityStateMap, selectIndex],

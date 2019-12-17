@@ -125,7 +125,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe }) => {
               id="rating"
               name="size-large"
               size="large"
-              value={recipeRating || null}
+              value={recipeRating ?? null}
               onChange={(_, newValue) => setRecipeRating(newValue)}
             />
           </Box>

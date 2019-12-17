@@ -65,13 +65,13 @@ const RecipeCard: React.FC<Props> = ({
     <Card>
       <CardMedia
         className={classes.media}
-        image={recipe.image || placeholder || defaultPlaceholder}
+        image={recipe.image ?? placeholder ?? defaultPlaceholder}
       />
 
       <CardHeader title={recipe.title} action={menuButton} />
 
       <CardContent>
-        <Rating name="recipeRating" value={recipe.rating || null} readOnly />
+        <Rating name="recipeRating" value={recipe.rating ?? null} readOnly />
       </CardContent>
 
       <CardActions>

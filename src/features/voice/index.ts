@@ -8,6 +8,16 @@ export type VoiceRecognitionArgs = {
   commands: Array<string>
 }
 
+declare global {
+  interface Window {
+    webkitSpeechRecognition?: typeof SpeechRecognition
+  }
+}
+
+// Firefox (after config option) and opera have no prefix, chrome and edge have prefix
+window.SpeechRecognition =
+  window.SpeechRecognition ?? window.webkitSpeechRecognition
+
 export const initVoiceRecognition =
   // Be undefined when speech recognition support is undefined
   (typeof SpeechRecognition !== 'undefined' || undefined) &&

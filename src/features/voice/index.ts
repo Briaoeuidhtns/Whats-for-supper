@@ -36,6 +36,8 @@ export const initVoiceRecognition =
       if (cmd) return callback(cmd)
     }
 
+    recogniser.start()
+
     return recogniser
   })
 

@@ -8,26 +8,26 @@ export type VoiceRecognitionArgs = {
   commands: Array<string>
 }
 
-export const initVoiceRecognition = ({
-  callback,
-  commands,
-}: VoiceRecognitionArgs) => {
-  const grammar = `#JSGF V1.0;
+export const initVoiceRecognition =
+  // Be undefined when speech recognition support is undefined
+  (typeof SpeechRecognition !== 'undefined' || undefined) &&
+  (({ callback, commands }: VoiceRecognitionArgs) => {
+    const grammar = `#JSGF V1.0;
     grammar in;
     public <response> = ${commands.join(' | ')};
   `
 
-  const recogniser = new SpeechRecognition()
-  recogniser.grammars.addFromString(grammar)
-  recogniser.onend = () => recogniser.start()
+    const recogniser = new SpeechRecognition()
+    recogniser.grammars.addFromString(grammar)
+    recogniser.onend = () => recogniser.start()
 
-  recogniser.onresult = res => {
-    const cmd = last(res.results ?? [])?.[0]?.transcript?.trim()
-    if (cmd) return callback(cmd)
-  }
+    recogniser.onresult = res => {
+      const cmd = last(res.results ?? [])?.[0]?.transcript?.trim()
+      if (cmd) return callback(cmd)
+    }
 
-  return recogniser
-}
+    return recogniser
+  })
 
 export const voiceReduxAdaptor = (
   dispatch: Dispatch,

@@ -3,7 +3,7 @@ import recipeReducer, {
   addRecipe,
   removeRecipe,
   makeRecipe,
-} from './recipeSlice'
+} from './recipeDataSlice'
 
 import uiReducer, {
   availabilityStateMap,

@@ -1,8 +1,6 @@
-import { combineReducers } from 'redux'
-import recipes from 'features/recipes/recipeSlice'
-import recipeUi from 'features/recipes/uiSlice'
+import recipeReducer from 'features/recipes/recipeSlice'
 
-const rootReducer = combineReducers({ recipes, recipeUi })
+const rootReducer = recipeReducer
 
 export type RootState = ReturnType<typeof rootReducer>
 

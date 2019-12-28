@@ -1,13 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { RootState } from '../../app/rootReducer'
+import { RootState } from 'app/rootReducer'
 import { createSelector } from '@reduxjs/toolkit'
-import {
-  selectRecipes,
-  makeRecipe,
-  shuffleRecipes,
-  removeRecipe,
-} from './recipeSlice'
-
+import { selectRecipes, shuffleRecipes } from './recipeDataSlice'
+import { makeRecipe, removeRecipe } from './combinedActions'
 export interface RecipeUiState {
   index: number
   showDescription: boolean
@@ -34,16 +29,14 @@ const recipeSlice = createSlice({
       state.showDescription = !state.showDescription
     },
   },
-  extraReducers: {
-    [makeRecipe.type]: state => {
+  extraReducers: b => {
+    b.addCase(makeRecipe, state => {
       state.index = 0
-    },
-    [shuffleRecipes.type]: state => {
+    })
+    b.addCase(shuffleRecipes, state => {
       state.index = 0
-    },
-    [removeRecipe.type](state) {
-      state.index = Math.max(state.index - 1, 0)
-    },
+    })
+    b.addCase(removeRecipe, (state, { payload: index }) => {})
   },
 })
 

@@ -3,13 +3,14 @@ import { connect } from 'react-redux'
 import { createSelector } from '@reduxjs/toolkit'
 
 import RecipeCard from './RecipeCard'
-import { selectRecipes, removeRecipe } from './recipeSlice'
 import {
+  selectRecipes,
+  removeRecipe,
   selectIndex,
   selectShowDescription,
   toggleDescription,
   availabilityStateMap,
-} from './uiSlice'
+} from './recipeSlice'
 import { Menu, MenuItem, ListItemIcon, IconButton } from '@material-ui/core'
 import { Delete as DeleteIcon, MoreVert as MenuIcon } from '@material-ui/icons'
 

@@ -32,11 +32,12 @@ const recipeSlice = createSlice({
   extraReducers: b => {
     b.addCase(makeRecipe, state => {
       state.index = 0
+      state.showDescription = false
     })
     b.addCase(shuffleRecipes, state => {
       state.index = 0
+      state.showDescription = false
     })
-    b.addCase(removeRecipe, (state, { payload: index }) => {})
   },
 })
 

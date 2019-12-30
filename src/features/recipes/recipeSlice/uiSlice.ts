@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { RootState } from 'app/rootReducer'
 import { createSelector } from '@reduxjs/toolkit'
 import { selectRecipes, shuffleRecipes } from './recipeDataSlice'
-import { makeRecipe, removeRecipe } from './combinedActions'
+import { makeRecipe } from './combinedActions'
 export interface RecipeUiState {
   index: number
   showDescription: boolean

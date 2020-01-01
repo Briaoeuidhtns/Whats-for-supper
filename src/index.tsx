@@ -12,6 +12,12 @@ import store, { persistor } from './app/store'
 import ErrorBoundary from 'components/ErrorBoundary'
 
 import { version as release } from '../package.json'
+import { initVoiceRecognition, voiceReduxAdaptor } from 'features/voice'
+import {
+  nextRecipe,
+  prevRecipe,
+  makeRecipe,
+} from 'features/recipes/recipeSlice'
 
 Sentry.init({
   dsn: 'https://60a4c38b006549769ba249366b78887b@sentry.io/1850302',
@@ -28,6 +34,14 @@ render(
     </Provider>
   </ErrorBoundary>,
   document.getElementById('root')
+)
+
+initVoiceRecognition?.(
+  voiceReduxAdaptor(store.dispatch, {
+    next: nextRecipe,
+    back: prevRecipe,
+    select: makeRecipe,
+  })
 )
 
 // If you want your app to work offline and load faster, you can change

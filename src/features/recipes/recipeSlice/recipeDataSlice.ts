@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { RootState } from '../../app/rootReducer'
+import { RootState } from 'app/rootReducer'
 import { sha1 as hash } from 'hash.js'
-import InitialRecipes from '../../recipes'
+import InitialRecipes from 'recipes'
 
 export interface Recipe {
   title: string
@@ -14,7 +14,7 @@ export interface RecipeListState {
   recipes: Recipe[]
 }
 
-let initialState: RecipeListState = {
+export const initialState: RecipeListState = {
   recipes: InitialRecipes,
 }
 
@@ -33,21 +33,12 @@ const keyfn = (val: Recipe, salt: any) => {
   return shift
 }
 
-const recipeSlice = createSlice({
+const recipeDataSlice = createSlice({
   name: 'recipes',
   initialState,
   reducers: {
     addRecipe(state, { payload: recipe }: PayloadAction<Recipe>) {
       state.recipes.push(recipe)
-    },
-    removeRecipe(state, { payload: index }: PayloadAction<number>) {
-      state.recipes.splice(index, 1)
-    },
-    makeRecipe(state, { payload: index }: PayloadAction<number>) {
-      const selected_recipe = state.recipes.splice(index, 1)[0]
-
-      // Add it as the last recipe
-      state.recipes.push(selected_recipe)
     },
     shuffleRecipes(state, { payload: salt }: PayloadAction<any>) {
       state.recipes.sort(
@@ -58,13 +49,8 @@ const recipeSlice = createSlice({
   },
 })
 
-export const {
-  addRecipe,
-  removeRecipe,
-  makeRecipe,
-  shuffleRecipes,
-} = recipeSlice.actions
+export const { addRecipe, shuffleRecipes } = recipeDataSlice.actions
 
 export const selectRecipes = (state: RootState) => state.recipes.recipes
 
-export default recipeSlice.reducer
+export default recipeDataSlice.reducer

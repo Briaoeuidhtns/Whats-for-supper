@@ -20,7 +20,7 @@ const extraReducers = createReducer(
       const index = action.payload ?? state.recipeUi.index
       if (index === state.recipeUi.index)
         state.recipeUi.index = Math.max(state.recipeUi.index - 1, 0)
-      state.recipes.recipes.splice(index)
+      state.recipes.recipes.splice(index, 1)
     })
   }
 )

@@ -9,8 +9,28 @@ import rootReducer from './rootReducer'
 import storage from 'redux-persist/lib/storage'
 import { PERSIST } from 'redux-persist/lib/constants'
 import { shuffleRecipes } from '../features/recipes/recipeSlice'
+import PouchDB from 'pouchdb'
+import Pouchpls from 'pouchdb-upsert'
+PouchDB.plugin(Pouchpls)
 
 const persistConfig = { key: 'root', storage, whitelist: ['recipes'] }
+
+const db = new PouchDB('cards')
+
+const addfirst = async (mstore: any) => {
+  const { _persist, ...state } = mstore.getState()
+  try {
+    await db.upsert('State', oldstate => ({ ...oldstate, state }))
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const addtodata: Middleware = mstore => next => action => {
+  const add_to = next(action)
+  addfirst(mstore)
+  return add_to
+}
 
 const sentryReporter: Middleware = store => next => action => {
   Sentry.addBreadcrumb({
@@ -32,6 +52,7 @@ const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
   middleware: [
     sentryReporter,
+    addtodata,
     ...getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [

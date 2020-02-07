@@ -1,4 +1,4 @@
-image: node:lts-alpine
+image: node
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive

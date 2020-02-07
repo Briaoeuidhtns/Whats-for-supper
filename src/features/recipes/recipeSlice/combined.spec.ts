@@ -1,5 +1,4 @@
 import combinedRecipeReducer from './combined'
-import { merge } from 'lodash'
 
 import { Recipe, removeRecipe, makeRecipe, toggleDescription } from '.'
 
@@ -54,6 +53,20 @@ describe('combined recipe reducer', () => {
       )
     ).toMatchObject({
       recipes: { recipes: [dummyRecipe] },
+    })
+
+    expect(
+      combinedRecipeReducer(
+        {
+          ...defaultState,
+          recipes: {
+            recipes: [dummyRecipe, dummyRecipe2],
+          },
+        },
+        { type: removeRecipe.type, payload: 0 }
+      )
+    ).toMatchObject({
+      recipes: { recipes: [dummyRecipe2] },
     })
   })
 

@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom'
 import App from './App'
 import store from '../app/store'
 import { Provider } from 'react-redux'
+import { pending } from 'util/test'
 
-it('renders without crashing', () => {
+it('renders without crashing', async () => {
   const div = document.createElement('div')
   ReactDOM.render(
     <Provider {...{ store }}>
@@ -13,4 +14,5 @@ it('renders without crashing', () => {
     div
   )
   ReactDOM.unmountComponentAtNode(div)
+  await pending()
 })

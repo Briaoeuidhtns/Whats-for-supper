@@ -11,24 +11,35 @@ import { PERSIST } from 'redux-persist/lib/constants'
 import { shuffleRecipes } from '../features/recipes/recipeSlice'
 import PouchDB from 'pouchdb'
 import Pouchpls from 'pouchdb-upsert'
+import { testAwait } from 'util/test'
+import { isPouchDBError } from 'util/types/pouchdb'
 PouchDB.plugin(Pouchpls)
 
 const persistConfig = { key: 'root', storage, whitelist: ['recipes'] }
 
-const db = new PouchDB('cards')
+interface Model {
+  state: ReturnType<typeof store.getState>
+}
+
+const db = new PouchDB<Model>('cards')
 
 const addfirst = async (mstore: any) => {
-  const { _persist, ...state } = mstore.getState()
+  // TODO remove after Redux Persist is removed
+  const { _persist: _, ...state } = mstore.getState()
   try {
-    await db.upsert('State', oldstate => ({ ...oldstate, state }))
+    await db.upsert('State', oldstate => ({
+      ...oldstate,
+      state,
+    }))
   } catch (error) {
-    console.error(error)
+    if (isPouchDBError(error)) console.error(error)
+    throw error
   }
 }
 
 const addtodata: Middleware = mstore => next => action => {
   const add_to = next(action)
-  addfirst(mstore)
+  testAwait(addfirst(mstore))
   return add_to
 }
 
@@ -74,8 +85,7 @@ const persistor = persistStore(store, null, () => {
 
 if (process.env.NODE_ENV === 'development' && module.hot) {
   module.hot.accept('./rootReducer', () => {
-    const nextRootReducer = require('./rootReducer').default // TODO replace with es6 import
-    store.replaceReducer(persistReducer(persistConfig, nextRootReducer))
+    store.replaceReducer(persistReducer(persistConfig, rootReducer))
   })
 }
 

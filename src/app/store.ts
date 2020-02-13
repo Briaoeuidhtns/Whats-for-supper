@@ -24,7 +24,6 @@ interface Model {
 const db = new PouchDB<Model>('http://localhost:5984/cards')
 testAwait(db.info())
 
-
 const addfirst = async (mstore: any) => {
   // TODO remove after Redux Persist is removed
   const { _persist: _, ...state } = mstore.getState()

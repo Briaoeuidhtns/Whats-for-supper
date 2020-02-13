@@ -27,6 +27,8 @@
     "react-dom": "^16.10.2",
     "react-redux": "^7.1.1",
     "react-scripts": "3.3.0",
+    "react-spring": "npm:@react-spring/web@^9.0.0-beta.34",
+    "react-use-gesture": "^7.0.4",
     "reduce-reducers": "^1.0.4",
     "redux": "^4.0.4",
     "redux-persist": "^6.0.0",

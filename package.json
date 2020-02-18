@@ -17,7 +17,6 @@
     "@types/react-redux": "^7.1.5",
     "@types/webpack-env": "^1.14.1",
     "hash.js": "^1.1.7",
-    "jest-junit-reporter": "^1.1.0",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-redux": "^7.1.1",
@@ -29,6 +28,7 @@
   },
   "devDependencies": {
     "prettier": "1.19.1",
+    "jest-junit-reporter": "^1.1.0",
     "source-map-explorer": "^2.2.2"
   },
   "prettier": {

@@ -3,6 +3,7 @@ image: node:lts-alpine
 stages:
   - validate
   - build
+  - analyze
 
 cache:
   paths:
@@ -12,8 +13,9 @@ install:
   stage: .pre
   tags:
     - Ubuntu 18.04
+
   script: yarn
-  
+
 
 test unit:
   stage: validate
@@ -22,7 +24,7 @@ test unit:
 
   script:
     - yarn test-junit
-    
+
   artifacts:
     reports:
       junit: test-report.xml
@@ -41,11 +43,24 @@ build:
   stage: build
   tags:
     - Ubuntu 18.04
-  
+
   script:
     - yarn build
-    
+
   artifacts:
     paths:
       - build
 
+
+source_map:
+  stage: analyze
+  tags:
+    - Ubuntu 18.04
+
+  script:
+    - yarn explore --html source-map-explorer.html
+
+  artifacts:
+    expose_as: 'source map explorer'
+    paths:
+      - source-map-explorer.html

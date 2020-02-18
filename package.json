@@ -28,7 +28,8 @@
     "typescript": "3.7.3"
   },
   "devDependencies": {
-    "prettier": "1.19.1"
+    "prettier": "1.19.1",
+    "source-map-explorer": "^2.2.2"
   },
   "prettier": {
     "proseWrap": "never",
@@ -40,6 +41,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "explore": "source-map-explorer build/static/js/*.js",
     "test": "react-scripts test",
     "test-junit": "react-scripts test --testResultsProcessor ./node_modules/jest-junit-reporter",
     "check-format": "prettier -c '**/*.{html,md,json,css,{js,ts}{,x}}'",

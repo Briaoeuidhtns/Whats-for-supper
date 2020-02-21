@@ -1,0 +1,4 @@
+[submodule "docs"]
+	path = docs
+	url = ../senior-design.wiki.git
+	branch = master

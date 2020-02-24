@@ -8,6 +8,7 @@ export interface Recipe {
   description: string
   image?: string
   rating?: number
+  tags: string[]
 }
 
 export interface RecipeListState {

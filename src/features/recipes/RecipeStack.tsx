@@ -10,17 +10,21 @@ import {
   selectShowDescription,
   toggleDescription,
   availabilityStateMap,
+  Recipe,
 } from './recipeSlice'
 import { Menu, MenuItem, ListItemIcon, IconButton } from '@material-ui/core'
 import { Delete as DeleteIcon, MoreVert as MenuIcon } from '@material-ui/icons'
+import { identity } from 'lodash'
 
 const selectRecipe = createSelector(
   [selectRecipes, selectIndex],
   (recipes, index) =>
-    recipes[index] ?? {
+    recipes[index] ??
+    identity<Recipe>({
       title: 'No available recipes',
       description: "Add a recipe with the '+' button on the bottom right.",
-    }
+      tags: [],
+    })
 )
 
 const mapState = createSelector(

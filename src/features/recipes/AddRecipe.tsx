@@ -18,6 +18,7 @@ import { Add as AddIcon } from '@material-ui/icons'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 
 import { addRecipe, removeRecipe } from './recipeSlice'
+import TagInput from 'components/TagInput'
 
 const mapDispatch = { addRecipe, removeRecipe }
 
@@ -51,6 +52,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe }) => {
   const [recipeText, setRecipeText] = useState('')
   const [recipeRating, setRecipeRating] = useState<number | undefined>()
   const [recipeDescription, setRecipeDescription] = useState('')
+  const [recipeTags, setRecipeTags] = useState<string[]>([])
 
   const submit = () => {
     setOpen(false)
@@ -64,6 +66,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe }) => {
       ),
       rating: recipeRating,
       description: recipeDescription,
+      tags: recipeTags,
     })
     cancel()
   }
@@ -73,6 +76,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe }) => {
     setRecipeText('')
     setRecipeRating(undefined)
     setRecipeDescription('')
+    setRecipeTags([])
   }
 
   return (
@@ -85,7 +89,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe }) => {
       <Dialog
         open={open}
         onClose={cancel}
-        onKeyPress={e => e.key === 'Enter' && submit()}
+        //onKeyPress={e => e.key === 'Enter' && submit()}
       >
         <DialogTitle>Add a recipe</DialogTitle>
         <DialogContent>
@@ -129,6 +133,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe }) => {
               onChange={(_, newValue) => setRecipeRating(newValue)}
             />
           </Box>
+          <TagInput {...{ recipeTags, setRecipeTags }} />
         </DialogContent>
         <DialogActions>
           <Button onClick={cancel} color="primary">

@@ -9,6 +9,7 @@ import {
   Collapse,
   IconButton,
   CardActions,
+  Chip,
 } from '@material-ui/core'
 
 import { makeStyles } from '@material-ui/core/styles'
@@ -71,6 +72,11 @@ const RecipeCard: React.FC<Props> = ({
       <CardHeader title={recipe.title} action={menuButton} />
 
       <CardContent>
+        <Typography>
+          {recipe.tags.map(txt => (
+            <Chip label={txt} />
+          ))}{' '}
+        </Typography>
         <Rating name="recipeRating" value={recipe.rating ?? null} readOnly />
       </CardContent>
 

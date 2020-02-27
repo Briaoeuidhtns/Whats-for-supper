@@ -8,7 +8,7 @@ import { persistStore, persistReducer } from 'redux-persist'
 import rootReducer from './rootReducer'
 import storage from 'redux-persist/lib/storage'
 import { PERSIST } from 'redux-persist/lib/constants'
-import { shuffleRecipes } from '../features/recipes/recipeSlice'
+import { shuffleRecipes,getFromCouch } from '../features/recipes/recipeSlice'
 import PouchDB from 'pouchdb'
 import Pouchpls from 'pouchdb-upsert'
 import { testAwait } from 'util/test'
@@ -16,17 +16,39 @@ import { isPouchDBError } from 'util/types/pouchdb'
 PouchDB.plugin(Pouchpls)
 
 const persistConfig = { key: 'root', storage, whitelist: ['recipes'] }
-
-interface Model {
-  state: ReturnType<typeof store.getState>
+type State = ReturnType<typeof store.getState>
+export interface Model {
+  state: State
 }
 
-const db = new PouchDB<Model>('http://localhost:5984/cards')
-testAwait(db.info())
+function observeStore(mstore: typeof store, onChange: (store: State) => void) {
+  let currentState: State
 
-const addfirst = async (mstore: any) => {
+  function handleChange() {
+    let nextState = store.getState()
+    if (nextState !== currentState) {
+      currentState = nextState;
+      onChange(currentState);
+    }
+  }
+
+  let unsubscribe = store.subscribe(handleChange);
+  handleChange();
+  return unsubscribe;
+}
+
+
+const db = new PouchDB<Model>('cards')
+const sync = db.sync<Model>('http://localhost:5984/cards', {
+  live: true,
+  retry: true
+}).on('change', function(info){
+  store.dispatch(getFromCouch(info))
+})
+
+const addfirst = async (mstore: State) => {
   // TODO remove after Redux Persist is removed
-  const { _persist: _, ...state } = mstore.getState()
+  const { ...state } = mstore
   try {
     await db.upsert('State', oldstate => ({
       ...oldstate,
@@ -36,12 +58,6 @@ const addfirst = async (mstore: any) => {
     if (isPouchDBError(error)) console.error(error)
     throw error
   }
-}
-
-const addtodata: Middleware = mstore => next => action => {
-  const add_to = next(action)
-  testAwait(addfirst(mstore))
-  return add_to
 }
 
 const sentryReporter: Middleware = store => next => action => {
@@ -64,7 +80,6 @@ const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
   middleware: [
     sentryReporter,
-    addtodata,
     ...getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [
@@ -89,6 +104,9 @@ if (process.env.NODE_ENV === 'development' && module.hot) {
     store.replaceReducer(persistReducer(persistConfig, rootReducer))
   })
 }
+
+
+observeStore(store, state => testAwait(addfirst(state)))
 
 export type AppDispatch = typeof store.dispatch
 

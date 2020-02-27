@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from 'app/rootReducer'
 import { sha1 as hash } from 'hash.js'
 import InitialRecipes from 'recipes'
+import {Model} from 'app/store'
 
 export interface Recipe {
   title: string
@@ -47,10 +48,15 @@ const recipeDataSlice = createSlice({
           keyfn(b, salt) + (b.rating ?? 0) - (keyfn(a, salt) + (a.rating ?? 0))
       )
     },
+    getFromCouch(state, {payload}: PayloadAction<PouchDB.Replication.SyncResult<Model>
+      >) {
+      state.recipes = payload.change.docs[0].state.recipes.recipes
+
+    }
   },
 })
 
-export const { addRecipe, shuffleRecipes } = recipeDataSlice.actions
+export const { addRecipe, shuffleRecipes,getFromCouch } = recipeDataSlice.actions
 
 export const selectRecipes = (state: RootState) => state.recipes.recipes
 

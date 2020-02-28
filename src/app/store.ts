@@ -8,7 +8,7 @@ import { persistStore, persistReducer } from 'redux-persist'
 import rootReducer from './rootReducer'
 import storage from 'redux-persist/lib/storage'
 import { PERSIST } from 'redux-persist/lib/constants'
-import { shuffleRecipes,getFromCouch } from '../features/recipes/recipeSlice'
+import { shuffleRecipes, getFromCouch } from '../features/recipes/recipeSlice'
 import PouchDB from 'pouchdb'
 import Pouchpls from 'pouchdb-upsert'
 import { testAwait } from 'util/test'
@@ -21,28 +21,34 @@ export interface Model {
   state: State
 }
 
-function observeStore(mstore: typeof store, onChange: (store: State) => void) {
+const observeStore = (
+  mstore: typeof store,
+  onChange: (state: State) => void
+) => {
   let currentState: State
 
-  function handleChange() {
-    let nextState = store.getState()
+  const handleChange = () => {
+    const nextState = mstore.getState()
     if (nextState !== currentState) {
-      currentState = nextState;
-      onChange(currentState);
+      currentState = nextState
+      onChange(currentState)
     }
   }
 
-  let unsubscribe = store.subscribe(handleChange);
-  handleChange();
-  return unsubscribe;
+  const unsubscribe = mstore.subscribe(handleChange)
+  handleChange()
+  return unsubscribe
 }
 
+const COUCHDB_HOST = process.env.REACT_APP_COUCHDB_HOST ?? 'http://localhost'
+const COUCHDB_PORT = process.env.REACT_APP_COUCHDB_PORT ?? 5984
+const COUCHDB_DB = process.env.REACT_APP_COUCHDB_DB ?? 'cards'
 
-const db = new PouchDB<Model>('cards')
-const sync = db.sync<Model>('http://localhost:5984/cards', {
+const db = new PouchDB<Model>(COUCHDB_DB)
+db.sync<Model>(`${COUCHDB_HOST}:${COUCHDB_PORT}/${COUCHDB_DB}`, {
   live: true,
-  retry: true
-}).on('change', function(info){
+  retry: true,
+}).on('change', function(info) {
   store.dispatch(getFromCouch(info))
 })
 
@@ -104,7 +110,6 @@ if (process.env.NODE_ENV === 'development' && module.hot) {
     store.replaceReducer(persistReducer(persistConfig, rootReducer))
   })
 }
-
 
 observeStore(store, state => testAwait(addfirst(state)))
 

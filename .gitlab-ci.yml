@@ -1,4 +1,12 @@
-image: node
+image: node:13.8
+
+services:
+  - couchdb:3.0.0
+
+variables:
+  REACT_APP_COUCHDB_HOST: couchdb
+  REACT_APP_COUCHDB_PORT: 5984
+  REACT_APP_COUCHDB_DB: cards
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive

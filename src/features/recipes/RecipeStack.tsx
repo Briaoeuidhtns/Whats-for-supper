@@ -48,7 +48,6 @@ const RecipeList: React.FC<Props> = ({
   showDescription,
   toggleDescription,
   removeRecipe,
-  currentRecipe,
   has,
 }) => {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null)
@@ -60,7 +59,7 @@ const RecipeList: React.FC<Props> = ({
         <MenuItem
           onClick={() => {
             closeMenu()
-            removeRecipe(currentRecipe)
+            removeRecipe()
           }}
         >
           <ListItemIcon>

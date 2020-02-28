@@ -7,6 +7,8 @@ variables:
   REACT_APP_COUCHDB_HOST: couchdb
   REACT_APP_COUCHDB_PORT: 5984
   REACT_APP_COUCHDB_DB: cards
+  COUCHDB_USER: admin
+  COUCHDB_PASSWORD: password
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive

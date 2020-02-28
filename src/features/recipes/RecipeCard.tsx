@@ -72,11 +72,11 @@ const RecipeCard: React.FC<Props> = ({
       <CardHeader title={recipe.title} action={menuButton} />
 
       <CardContent>
-        <Typography>
-          {recipe.tags.map(txt => (
-            <Chip label={txt} />
-          ))}{' '}
-        </Typography>
+        <div>
+          {recipe.tags.map((txt, i) => (
+            <Chip label={txt} key={i} />
+          ))}
+        </div>
         <Rating name="recipeRating" value={recipe.rating ?? null} readOnly />
       </CardContent>
 

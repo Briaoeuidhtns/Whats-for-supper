@@ -6,6 +6,7 @@ import RecipeCard from './RecipeCard'
 import {
   selectRecipes,
   removeRecipe,
+  nextRecipe,
   selectIndex,
   selectShowDescription,
   toggleDescription,
@@ -22,6 +23,9 @@ import {
 } from '@material-ui/core'
 import { Delete as DeleteIcon, MoreVert as MenuIcon } from '@material-ui/icons'
 
+import { useSpring, animated } from 'react-spring'
+import { useDrag } from 'react-use-gesture'
+
 const TUTORIAL_RECIPE: Readonly<Recipe> = {
   title: 'No available recipes',
   description: "Add a recipe with the '+' button on the bottom right.",
@@ -31,7 +35,7 @@ const TUTORIAL_RECIPE: Readonly<Recipe> = {
 const selectRecipe = createSelector(
   [selectRecipes, selectIndex],
   (recipes, index) => {
-    const [head, next] = recipes.slice(index, index + 1)
+    const [head, next] = recipes.slice(index, index + 1 + 1)
     return [head, next ?? TUTORIAL_RECIPE]
   }
 )
@@ -46,7 +50,7 @@ const mapState = createSelector(
   })
 )
 
-const mapDispatch = { toggleDescription, removeRecipe }
+const mapDispatch = { toggleDescription, removeRecipe, nextRecipe }
 
 interface OwnProps {}
 
@@ -66,7 +70,7 @@ const useStyles = makeStyles({
     '& $top': { zIndex: 100 },
     '& $bottom': { zIndex: -100 },
   },
-  top: { position: 'relative' },
+  top: {},
   bottom: {},
 })
 
@@ -74,27 +78,37 @@ const RecipeList: React.FC<Props> = ({
   recipes: [head, next],
   showDescription,
   toggleDescription,
+  nextRecipe,
   removeRecipe,
   has,
 }) => {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null)
   const classes = useStyles()
+
+  const [springStyle, setSpring] = useSpring(() => ({ x: 0, y: 0 }))
+  const bindDrag = useDrag(({ down, movement: [mx, my], velocity }) => {
+    setSpring({ x: down ? mx : 0, y: down ? my : 0 })
+    if (Math.abs(velocity) > 5) nextRecipe()
+  })
+
   const closeMenu = () => setMenuAnchor(null)
   const headCard = head && (
-    <RecipeCard
-      recipe={head}
-      className={classes.top}
-      showDescription={showDescription}
-      toggleDescription={() => toggleDescription()}
-      menuButton={
-        <IconButton
-          onClick={e => setMenuAnchor(e.currentTarget)}
-          disabled={!has}
-        >
-          <MenuIcon />
-        </IconButton>
-      }
-    />
+    <animated.div style={springStyle} {...bindDrag()}>
+      <RecipeCard
+        recipe={head}
+        className={classes.top}
+        showDescription={showDescription}
+        toggleDescription={() => toggleDescription()}
+        menuButton={
+          <IconButton
+            onClick={e => setMenuAnchor(e.currentTarget)}
+            disabled={!has}
+          >
+            <MenuIcon />
+          </IconButton>
+        }
+      />
+    </animated.div>
   )
 
   const nextCard = (

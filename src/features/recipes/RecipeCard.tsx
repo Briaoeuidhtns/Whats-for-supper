@@ -1,6 +1,7 @@
 import React from 'react'
 
 import {
+  Box,
   Card,
   CardHeader,
   CardContent,
@@ -73,11 +74,11 @@ const RecipeCard: React.FC<Props> = ({
       <CardHeader title={recipe.title} action={menuButton} />
 
       <CardContent>
-        <div>
+        <Box>
           {recipe.tags.map((txt, i) => (
             <Chip label={txt} key={i} />
           ))}
-        </div>
+        </Box>
         <Rating name="recipeRating" value={recipe.rating ?? null} readOnly />
       </CardContent>
 

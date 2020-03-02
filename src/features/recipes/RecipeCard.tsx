@@ -43,11 +43,11 @@ const useStyles = makeStyles({
   },
 })
 
-interface OwnProps {
+interface OwnProps extends React.ComponentPropsWithoutRef<typeof Card> {
   recipe: Recipe
   placeholder?: string
-  showDescription: boolean
-  toggleDescription: React.MouseEventHandler<HTMLButtonElement>
+  showDescription?: boolean
+  toggleDescription?: React.MouseEventHandler<HTMLButtonElement>
   menuButton?: React.ReactNode
 }
 
@@ -59,11 +59,12 @@ const RecipeCard: React.FC<Props> = ({
   showDescription,
   toggleDescription,
   menuButton,
+  ...props
 }) => {
   const classes = useStyles()
 
   return (
-    <Card>
+    <Card {...props}>
       <CardMedia
         className={classes.media}
         image={recipe.image ?? placeholder ?? defaultPlaceholder}
@@ -86,7 +87,7 @@ const RecipeCard: React.FC<Props> = ({
           onClick={toggleDescription}
           disabled={!recipe.description}
         >
-          <ExpandableIcon expand={showDescription} />
+          <ExpandableIcon expand={showDescription ?? false} />
         </IconButton>
       </CardActions>
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { connect } from 'react-redux'
 import { createSelector } from '@reduxjs/toolkit'
 
@@ -21,6 +21,7 @@ import {
   IconButton,
   makeStyles,
 } from '@material-ui/core'
+import { useWindowSize, useElSize } from 'util/hooks'
 import { Delete as DeleteIcon, MoreVert as MenuIcon } from '@material-ui/icons'
 
 import { useSpring, animated } from 'react-spring'
@@ -61,6 +62,7 @@ const useStyles = makeStyles({
     display: 'grid',
     gridTemplate: '1fr / 1fr',
     placeItems: 'center',
+    userSelect: 'none',
     '& > *': {
       gridColumn: '1 / 1',
       gridRow: '1 / 1',
@@ -84,16 +86,41 @@ const RecipeList: React.FC<Props> = ({
 }) => {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null)
   const classes = useStyles()
+  const { width } = useWindowSize()
+  const [bindCardSize, cardSize] = useElSize<HTMLDivElement>()
 
-  const [springStyle, setSpring] = useSpring(() => ({ x: 0, y: 0 }))
-  const bindDrag = useDrag(({ down, movement: [mx, my], velocity }) => {
-    setSpring({ x: down ? mx : 0, y: down ? my : 0 })
-    if (Math.abs(velocity) > 5) nextRecipe()
+  // Ref over state bc animations don't trigger a render,
+  // so setState may not take effect between calling and the frame which triggers onRest
+  const isLeaving = useRef(false)
+
+  const [springStyle, setSpring] = useSpring(() => ({
+    x: 0,
+    opacity: 1,
+    onRest: () => {
+      if (isLeaving.current) {
+        nextRecipe()
+        isLeaving.current = false
+        setSpring({ x: 0, opacity: 1, reset: true })
+      }
+    },
+  }))
+
+  const bindDrag = useDrag(({ down, movement: [mx, _my], velocity }) => {
+    if (!isLeaving.current) {
+      setSpring({ x: down ? mx : 0 })
+      if (Math.abs(velocity) > 5) {
+        setSpring({
+          opacity: 0,
+          x: ((width + (cardSize?.width ?? 0)) / 2) * Math.sign(velocity),
+        })
+        isLeaving.current = true
+      }
+    }
   })
 
   const closeMenu = () => setMenuAnchor(null)
   const headCard = head && (
-    <animated.div style={springStyle} {...bindDrag()}>
+    <animated.div style={springStyle} {...bindDrag()} {...bindCardSize}>
       <RecipeCard
         recipe={head}
         className={classes.top}

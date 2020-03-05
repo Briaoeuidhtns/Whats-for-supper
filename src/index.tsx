@@ -8,7 +8,7 @@ import * as Sentry from '@sentry/browser'
 import { CircularProgress } from '@material-ui/core'
 
 import App from './components/App'
-import store, { persistor } from './app/store'
+import store from './app/store' //, { persistor } 
 import ErrorBoundary from 'components/ErrorBoundary'
 
 import { version as release } from '../package.json'
@@ -25,12 +25,11 @@ Sentry.init({
   environment: process.env.NODE_ENV,
 })
 
+
 render(
   <ErrorBoundary>
     <Provider store={store}>
-      <PersistGate loading={<CircularProgress />} persistor={persistor}>
         <App />
-      </PersistGate>
     </Provider>
   </ErrorBoundary>,
   document.getElementById('root')

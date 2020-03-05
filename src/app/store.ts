@@ -13,6 +13,7 @@ import PouchDB from 'pouchdb'
 import Pouchpls from 'pouchdb-upsert'
 import { testAwait } from 'util/test'
 import { isPouchDBError } from 'util/types/pouchdb'
+import { isEqual } from 'lodash'
 PouchDB.plugin(Pouchpls)
 
 const persistConfig = { key: 'root', storage, whitelist: ['recipes'] }
@@ -27,9 +28,9 @@ const observeStore = (
 ) => {
   let currentState: State
 
-  const handleChange = () => {
-    const nextState = mstore.getState()
-    if (nextState !== currentState) {
+  function handleChange() {
+    let nextState = store.getState()
+    if (!isEqual(nextState, currentState)) {
       currentState = nextState
       onChange(currentState)
     }
@@ -82,7 +83,7 @@ const sentryReporter: Middleware = store => next => action => {
 }
 
 const store = configureStore({
-  reducer: persistReducer(persistConfig, rootReducer),
+  reducer: rootReducer,
   devTools: process.env.NODE_ENV !== 'production',
   middleware: [
     sentryReporter,
@@ -101,13 +102,13 @@ const store = configureStore({
 })
 
 const shuffleSalt = Date.now()
-const persistor = persistStore(store, null, () => {
-  store.dispatch(shuffleRecipes(shuffleSalt))
-})
+//const persistor = persistStore(store, null, () => {
+//  store.dispatch(shuffleRecipes(shuffleSalt))
+//})
 
 if (process.env.NODE_ENV === 'development' && module.hot) {
   module.hot.accept('./rootReducer', () => {
-    store.replaceReducer(persistReducer(persistConfig, rootReducer))
+    store.replaceReducer(rootReducer)
   })
 }
 
@@ -117,4 +118,4 @@ export type AppDispatch = typeof store.dispatch
 
 export default store
 
-export { persistor }
+//export { persistor }

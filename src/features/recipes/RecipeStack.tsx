@@ -105,18 +105,20 @@ const RecipeList: React.FC<Props> = ({
     },
   }))
 
-  const bindDrag = useDrag(({ down, movement: [mx, _my], velocity }) => {
-    if (!isLeaving.current) {
-      setSpring({ x: down ? mx : 0 })
-      if (Math.abs(velocity) > 5) {
-        setSpring({
-          opacity: 0,
-          x: ((width + (cardSize?.width ?? 0)) / 2) * Math.sign(velocity),
-        })
-        isLeaving.current = true
+  const bindDrag = useDrag(
+    ({ down, movement: [mx], velocity, direction: [vx] }) => {
+      if (!isLeaving.current) {
+        setSpring({ x: down ? mx : 0 })
+        if (Math.abs(velocity) > 5) {
+          setSpring({
+            opacity: 0,
+            x: ((width + (cardSize?.width ?? 0)) / 2) * Math.sign(vx || 1),
+          })
+          isLeaving.current = true
+        }
       }
     }
-  })
+  )
 
   const closeMenu = () => setMenuAnchor(null)
   const headCard = head && (

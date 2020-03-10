@@ -12,6 +12,7 @@ import {
   toggleDescription,
   availabilityStateMap,
   Recipe,
+  prevRecipe,
 } from './recipeSlice'
 import {
   Box,
@@ -89,32 +90,36 @@ const RecipeList: React.FC<Props> = ({
   const { width } = useWindowSize()
   const [bindCardSize, cardSize] = useElSize<HTMLDivElement>()
 
+  const edgeThreshold = width * 0.1
+
   // Ref over state bc animations don't trigger a render,
   // so setState may not take effect between calling and the frame which triggers onRest
-  const isLeaving = useRef(false)
+  const isLeaving = useRef<-1 | 0 | 1>(0)
 
   const [springStyle, setSpring] = useSpring(() => ({
     x: 0,
     opacity: 1,
     onRest: () => {
       if (isLeaving.current) {
-        nextRecipe()
-        isLeaving.current = false
+        ;(isLeaving.current < 0 ? prevRecipe : nextRecipe)()
+        isLeaving.current = 0
         setSpring({ x: 0, opacity: 1, reset: true })
       }
     },
   }))
 
   const bindDrag = useDrag(
-    ({ down, movement: [mx], velocity, direction: [vx] }) => {
+    ({ down, movement: [mx], xy: [abs_x], swipe: [swipe] }) => {
       if (!isLeaving.current) {
         setSpring({ x: down ? mx : 0 })
-        if (Math.abs(velocity) > 5) {
+        if (swipe || Math.abs(width - abs_x) > edgeThreshold) {
           setSpring({
             opacity: 0,
-            x: ((width + (cardSize?.width ?? 0)) / 2) * Math.sign(vx || 1),
+            // Width not defined in node environments, ie tests
+            x:
+              ((width + (cardSize?.width ?? 0)) / 2) * (swipe || Math.sign(mx)),
           })
-          isLeaving.current = true
+          isLeaving.current = (swipe || Math.sign(mx)) as -1 | 0 | 1
         }
       }
     }

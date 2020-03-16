@@ -64,6 +64,16 @@ check format:
     - yarn
     - yarn check-format
 
+
+check eslint:
+  stage: validate
+  tags:
+    - Ubuntu 18.04
+
+  script:
+    - yarn lint
+
+
 build:
   stage: build
   tags:

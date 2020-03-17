@@ -26,7 +26,7 @@ typecheck tests:
     - Ubuntu 18.04
 
   script:
-    - yarn tsc --noEmit src/**/*.spec.ts
+    - yarn tsc
 
 
 test unit:

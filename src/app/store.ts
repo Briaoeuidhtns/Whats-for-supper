@@ -32,7 +32,6 @@ const observeStore = (
       onChange(currentState)
     }
   }
-  mstore.dispatch(shuffleRecipes(shuffleSalt))
   const unsubscribe = mstore.subscribe(handleChange)
   handleChange()
   return unsubscribe
@@ -46,9 +45,18 @@ const db = new PouchDB<Model>(COUCHDB_DB)
 db.sync<Model>(`${COUCHDB_HOST}:${COUCHDB_PORT}/${COUCHDB_DB}`, {
   live: true,
   retry: true,
-}).on('change', function(info) {
-  store.dispatch(getFromCouch(info))
+}).on('change', function(change) {
+  store.dispatch(getFromCouch(change.change.docs[0]))
 })
+
+const initialget = async() => {
+
+  const dbget = await db.get('State')
+  store.dispatch(getFromCouch(dbget))
+  //store.dispatch(shuffleRecipes("here"))
+}
+initialget()
+
 
 const addfirst = async (mstore: State) => {
   // TODO remove after Redux Persist is removed

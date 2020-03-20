@@ -1,8 +1,9 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction, createAction } from '@reduxjs/toolkit'
 import { RootState } from 'app/rootReducer'
 import { sha1 as hash } from 'hash.js'
 import InitialRecipes from 'recipes'
 import { Model } from 'app/store'
+import {Reducer} from 'redux'
 
 export interface Recipe {
   title: string
@@ -14,10 +15,12 @@ export interface Recipe {
 
 export interface RecipeListState {
   recipes: Recipe[]
+  rehydrated: boolean
 }
 
 export const initialState: RecipeListState = {
   recipes: InitialRecipes,
+  rehydrated: false,
 }
 
 // To the best of my knowledge, this generates a normalish distribution
@@ -43,26 +46,41 @@ const recipeDataSlice = createSlice({
       state.recipes.push(recipe)
     },
     shuffleRecipes(state, { payload: salt }: PayloadAction<any>) {
+      throw new Error("here")
       state.recipes.sort(
         (a, b) =>
           keyfn(b, salt) + (b.rating ?? 0) - (keyfn(a, salt) + (a.rating ?? 0))
       )
     },
-    getFromCouch(
-      state,
-      { payload }: PayloadAction<PouchDB.Replication.SyncResult<Model>>
-    ) {
-      state.recipes = payload.change.docs[0].state.recipes.recipes
-    },
   },
 })
+
+export const getFromCouch = createAction<Model>(
+  'recipes/getFromCouch'
+)
+
+const getFromCouchReducer:Reducer<RecipeListState> = (
+    state,
+    action) =>
+  {
+    if(getFromCouch.match(action)){
+       return {...action.payload.state.recipes, rehydrated:true}
+    }else{
+      if(state?.rehydrated){
+        return recipeDataSlice.reducer(state,action)
+      }
+    }
+    if(state == null){
+      throw new Error("state is null")
+    }
+    return state
+  }
 
 export const {
   addRecipe,
   shuffleRecipes,
-  getFromCouch,
 } = recipeDataSlice.actions
 
 export const selectRecipes = (state: RootState) => state.recipes.recipes
 
-export default recipeDataSlice.reducer
+export default getFromCouchReducer

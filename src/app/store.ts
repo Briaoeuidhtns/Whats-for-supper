@@ -4,24 +4,21 @@ import {
   getDefaultMiddleware,
   Middleware,
 } from '@reduxjs/toolkit'
-import { persistStore, persistReducer } from 'redux-persist'
 import rootReducer from './rootReducer'
-import storage from 'redux-persist/lib/storage'
-import { PERSIST } from 'redux-persist/lib/constants'
 import { shuffleRecipes, getFromCouch } from '../features/recipes/recipeSlice'
 import PouchDB from 'pouchdb'
-import Pouchpls from 'pouchdb-upsert'
+import Pouch from 'pouchdb-upsert'
 import { testAwait } from 'util/test'
 import { isPouchDBError } from 'util/types/pouchdb'
 import { isEqual } from 'lodash'
-PouchDB.plugin(Pouchpls)
+PouchDB.plugin(Pouch)
 
-const persistConfig = { key: 'root', storage, whitelist: ['recipes'] }
 type State = ReturnType<typeof store.getState>
 export interface Model {
   state: State
 }
 
+const shuffleSalt = Date.now()
 const observeStore = (
   mstore: typeof store,
   onChange: (state: State) => void
@@ -35,7 +32,7 @@ const observeStore = (
       onChange(currentState)
     }
   }
-
+  mstore.dispatch(shuffleRecipes(shuffleSalt))
   const unsubscribe = mstore.subscribe(handleChange)
   handleChange()
   return unsubscribe
@@ -94,14 +91,13 @@ const store = configureStore({
           // This isn't great practice, but it's pretty harmless
           // Only disable their action to keep checking for our own
           // https://github.com/rt2zz/redux-persist/issues/988
-          PERSIST,
+          //PERSIST,
         ],
       },
     }),
   ],
 })
 
-const shuffleSalt = Date.now()
 //const persistor = persistStore(store, null, () => {
 //  store.dispatch(shuffleRecipes(shuffleSalt))
 //})

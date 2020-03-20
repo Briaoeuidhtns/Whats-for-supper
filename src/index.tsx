@@ -1,11 +1,8 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { PersistGate } from 'redux-persist/integration/react'
 import { Provider } from 'react-redux'
 import * as serviceWorker from './serviceWorker'
 import * as Sentry from '@sentry/browser'
-
-import { CircularProgress } from '@material-ui/core'
 
 import App from './components/App'
 import store from './app/store' //, { persistor } 

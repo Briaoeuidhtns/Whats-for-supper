@@ -49,18 +49,13 @@ db.sync<Model>(`${COUCHDB_HOST}:${COUCHDB_PORT}/${COUCHDB_DB}`, {
   store.dispatch(getFromCouch(change.change.docs[0]))
 })
 
-const initialget = async() => {
-
+const initialget = async () => {
   const dbget = await db.get('State')
   store.dispatch(getFromCouch(dbget))
-  //store.dispatch(shuffleRecipes("here"))
+  store.dispatch(shuffleRecipes(shuffleSalt))
 }
-initialget()
 
-
-const addfirst = async (mstore: State) => {
-  // TODO remove after Redux Persist is removed
-  const { ...state } = mstore
+const addfirst = async (state: State) => {
   try {
     await db.upsert('State', oldstate => ({
       ...oldstate,
@@ -106,9 +101,7 @@ const store = configureStore({
   ],
 })
 
-//const persistor = persistStore(store, null, () => {
-//  store.dispatch(shuffleRecipes(shuffleSalt))
-//})
+initialget()
 
 if (process.env.NODE_ENV === 'development' && module.hot) {
   module.hot.accept('./rootReducer', () => {

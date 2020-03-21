@@ -3,7 +3,8 @@ import { RootState } from 'app/rootReducer'
 import { sha1 as hash } from 'hash.js'
 import InitialRecipes from 'recipes'
 import { Model } from 'app/store'
-import {Reducer} from 'redux'
+import { Reducer } from 'redux'
+import { isReduxInternalAction } from 'util/types/redux'
 
 export interface Recipe {
   title: string
@@ -46,7 +47,6 @@ const recipeDataSlice = createSlice({
       state.recipes.push(recipe)
     },
     shuffleRecipes(state, { payload: salt }: PayloadAction<any>) {
-      throw new Error("here")
       state.recipes.sort(
         (a, b) =>
           keyfn(b, salt) + (b.rating ?? 0) - (keyfn(a, salt) + (a.rating ?? 0))
@@ -55,31 +55,22 @@ const recipeDataSlice = createSlice({
   },
 })
 
-export const getFromCouch = createAction<Model>(
-  'recipes/getFromCouch'
-)
+export const getFromCouch = createAction<Model>('recipes/getFromCouch')
 
-const getFromCouchReducer:Reducer<RecipeListState> = (
-    state,
-    action) =>
-  {
-    if(getFromCouch.match(action)){
-       return {...action.payload.state.recipes, rehydrated:true}
-    }else{
-      if(state?.rehydrated){
-        return recipeDataSlice.reducer(state,action)
-      }
-    }
-    if(state == null){
-      throw new Error("state is null")
-    }
-    return state
-  }
+const getFromCouchReducer: Reducer<RecipeListState> = (state, action) => {
+  if (getFromCouch.match(action))
+    return { ...action.payload.state.recipes, rehydrated: true }
 
-export const {
-  addRecipe,
-  shuffleRecipes,
-} = recipeDataSlice.actions
+  // Allows initialize action to pass through, may not be correct
+  if (!state?.rehydrated && !isReduxInternalAction(action))
+    throw new Error(
+      `Action dispatched before rehydrated: ${JSON.stringify(action)}`
+    )
+
+  return recipeDataSlice.reducer(state, action)
+}
+
+export const { addRecipe, shuffleRecipes } = recipeDataSlice.actions
 
 export const selectRecipes = (state: RootState) => state.recipes.recipes
 

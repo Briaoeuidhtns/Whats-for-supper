@@ -5,77 +5,6 @@ import {
   Middleware,
 } from '@reduxjs/toolkit'
 import rootReducer from './rootReducer'
-import {
-  shuffleRecipes,
-  getFromCouch,
-  addDefaultRecipes,
-} from '../features/recipes/recipeSlice'
-import PouchDB from 'pouchdb'
-import Pouch from 'pouchdb-upsert'
-import { testAwait } from 'util/test'
-import { isPouchDBError } from 'util/types/pouchdb'
-import { isEqual } from 'lodash'
-PouchDB.plugin(Pouch)
-
-type State = ReturnType<typeof store.getState>
-export interface Model {
-  state: State
-}
-
-const shuffleSalt = Date.now()
-const observeStore = (
-  mstore: typeof store,
-  onChange: (state: State) => void
-) => {
-  let currentState: State
-
-  function handleChange() {
-    let nextState = store.getState()
-    if (!isEqual(nextState, currentState)) {
-      currentState = nextState
-      onChange(currentState)
-    }
-  }
-  const unsubscribe = mstore.subscribe(handleChange)
-  handleChange()
-  return unsubscribe
-}
-
-const COUCHDB_HOST = process.env.REACT_APP_COUCHDB_HOST ?? 'http://localhost'
-const COUCHDB_PORT = process.env.REACT_APP_COUCHDB_PORT ?? 5984
-const COUCHDB_DB = process.env.REACT_APP_COUCHDB_DB ?? 'cards'
-
-const db = new PouchDB<Model>(COUCHDB_DB)
-db.sync<Model>(`${COUCHDB_HOST}:${COUCHDB_PORT}/${COUCHDB_DB}`, {
-  live: true,
-  retry: true,
-}).on('change', function(change) {
-  store.dispatch(getFromCouch(change.change.docs[0]))
-})
-
-const initialget = async () => {
-  try {
-    const dbget = await db.get('State')
-    store.dispatch(getFromCouch(dbget))
-  } catch (e) {
-    if (isPouchDBError(e) && e.status === 404) {
-      store.dispatch(addDefaultRecipes())
-    } else throw e
-  }
-  store.dispatch(shuffleRecipes(shuffleSalt))
-}
-
-const addfirst = async (state: State) => {
-  try {
-    await db.upsert('State', oldstate => ({
-      ...oldstate,
-      state,
-    }))
-  } catch (error) {
-    if (isPouchDBError(error)) console.error(error)
-    throw error
-  }
-}
 
 const sentryReporter: Middleware = store => next => action => {
   Sentry.addBreadcrumb({
@@ -98,16 +27,13 @@ const store = configureStore({
   middleware: [sentryReporter, ...getDefaultMiddleware()],
 })
 
-testAwait(initialget())
-
 if (process.env.NODE_ENV === 'development' && module.hot) {
   module.hot.accept('./rootReducer', () => {
     store.replaceReducer(rootReducer)
   })
 }
 
-observeStore(store, state => testAwait(addfirst(state)))
-
 export type AppDispatch = typeof store.dispatch
 
+export type Store = typeof store
 export default store

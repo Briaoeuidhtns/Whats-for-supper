@@ -17,11 +17,21 @@ import {
 } from 'features/recipes/recipeSlice'
 import RehydrateGuard from 'components/RehydrateGuard'
 import { LinearProgress } from '@material-ui/core'
+import { init as initDB } from 'app/db'
 
 Sentry.init({
   dsn: 'https://60a4c38b006549769ba249366b78887b@sentry.io/1850302',
   release,
   environment: process.env.NODE_ENV,
+})
+
+initDB(store, {
+  host: process.env.REACT_APP_COUCHDB_HOST,
+  port:
+    (process.env.REACT_APP_COUCHDB_PORT &&
+      parseInt(process.env.REACT_APP_COUCHDB_PORT)) ||
+    undefined,
+  name: process.env.REACT_APP_COUCHDB_DB,
 })
 
 render(

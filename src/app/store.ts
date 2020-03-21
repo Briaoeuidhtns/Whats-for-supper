@@ -5,7 +5,11 @@ import {
   Middleware,
 } from '@reduxjs/toolkit'
 import rootReducer from './rootReducer'
-import { shuffleRecipes, getFromCouch } from '../features/recipes/recipeSlice'
+import {
+  shuffleRecipes,
+  getFromCouch,
+  addDefaultRecipes,
+} from '../features/recipes/recipeSlice'
 import PouchDB from 'pouchdb'
 import Pouch from 'pouchdb-upsert'
 import { testAwait } from 'util/test'
@@ -50,8 +54,14 @@ db.sync<Model>(`${COUCHDB_HOST}:${COUCHDB_PORT}/${COUCHDB_DB}`, {
 })
 
 const initialget = async () => {
-  const dbget = await db.get('State')
-  store.dispatch(getFromCouch(dbget))
+  try {
+    const dbget = await db.get('State')
+    store.dispatch(getFromCouch(dbget))
+  } catch (e) {
+    if (isPouchDBError(e) && e.status === 404) {
+      store.dispatch(addDefaultRecipes())
+    } else throw e
+  }
   store.dispatch(shuffleRecipes(shuffleSalt))
 }
 
@@ -101,7 +111,7 @@ const store = configureStore({
   ],
 })
 
-initialget()
+testAwait(initialget())
 
 if (process.env.NODE_ENV === 'development' && module.hot) {
   module.hot.accept('./rootReducer', () => {

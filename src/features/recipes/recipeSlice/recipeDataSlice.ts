@@ -24,6 +24,11 @@ export const initialState: RecipeListState = {
   rehydrated: false,
 }
 
+export const minimalInitialState: RecipeListState = {
+  recipes: [],
+  rehydrated: false,
+}
+
 // To the best of my knowledge, this generates a normalish distribution
 const keyfn = (val: Recipe, salt: any) => {
   const variance = 15
@@ -55,17 +60,27 @@ const recipeDataSlice = createSlice({
   },
 })
 
-export const getFromCouch = createAction<Model>('recipes/getFromCouch')
+export const getFromCouch = createAction<Model>(
+  `${recipeDataSlice.name}/getFromCouch`
+)
+
+export const addDefaultRecipes = createAction(
+  `${recipeDataSlice.name}/addInitialRecipes`
+)
 
 const getFromCouchReducer: Reducer<RecipeListState> = (state, action) => {
   if (getFromCouch.match(action))
     return { ...action.payload.state.recipes, rehydrated: true }
 
-  // Allows initialize action to pass through, may not be correct
-  if (!state?.rehydrated && !isReduxInternalAction(action))
-    throw new Error(
-      `Action dispatched before rehydrated: ${JSON.stringify(action)}`
-    )
+  if (addDefaultRecipes.match(action))
+    return { ...recipeDataSlice.reducer(undefined, action), rehydrated: true }
+
+  if (!state?.rehydrated)
+    if (isReduxInternalAction(action)) return minimalInitialState
+    else
+      throw new Error(
+        `Action dispatched before rehydrated: ${JSON.stringify(action)}`
+      )
 
   return recipeDataSlice.reducer(state, action)
 }

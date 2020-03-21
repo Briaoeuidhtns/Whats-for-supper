@@ -15,6 +15,8 @@ import {
   prevRecipe,
   makeRecipe,
 } from 'features/recipes/recipeSlice'
+import RehydrateGuard from 'components/RehydrateGuard'
+import { LinearProgress } from '@material-ui/core'
 
 Sentry.init({
   dsn: 'https://60a4c38b006549769ba249366b78887b@sentry.io/1850302',
@@ -22,11 +24,12 @@ Sentry.init({
   environment: process.env.NODE_ENV,
 })
 
-
 render(
   <ErrorBoundary>
     <Provider store={store}>
+      <RehydrateGuard loading={<LinearProgress />}>
         <App />
+      </RehydrateGuard>
     </Provider>
   </ErrorBoundary>,
   document.getElementById('root')

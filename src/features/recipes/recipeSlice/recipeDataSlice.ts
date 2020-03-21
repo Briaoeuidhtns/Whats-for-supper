@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, createAction } from '@reduxjs/toolkit'
 import { RootState } from 'app/rootReducer'
 import { sha1 as hash } from 'hash.js'
 import InitialRecipes from 'recipes'
-import { Model } from 'app/store'
+import { Model } from 'app/db'
 import { Reducer } from 'redux'
 import { isReduxInternalAction } from 'util/types/redux'
 
@@ -90,3 +90,5 @@ export const { addRecipe, shuffleRecipes } = recipeDataSlice.actions
 export const selectRecipes = (state: RootState) => state.recipes.recipes
 
 export default getFromCouchReducer
+
+export const recipeDataReducer = recipeDataSlice.reducer

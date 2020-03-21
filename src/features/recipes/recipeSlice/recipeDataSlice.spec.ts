@@ -2,9 +2,11 @@ import recipeReducer, {
   Recipe,
   addRecipe,
   shuffleRecipes,
+  minimalInitialState,
+  recipeDataReducer,
 } from './recipeDataSlice'
 
-const defaultState = recipeReducer(undefined, { type: undefined })
+const defaultState = recipeDataReducer(undefined, { type: undefined })
 
 const dummyRecipe: Recipe = {
     title: 'Dummy Recipe',
@@ -21,31 +23,33 @@ const dummyRecipe: Recipe = {
 describe('recipe data reducer', () => {
   it('should handle addRecipe', () => {
     expect(
-      recipeReducer(
+      recipeDataReducer(
         {
+          ...minimalInitialState,
           recipes: [],
         },
         { type: addRecipe.type, payload: dummyRecipe }
       )
-    ).toEqual({
+    ).toMatchObject({
       recipes: [dummyRecipe],
     })
 
     expect(
-      recipeReducer(
+      recipeDataReducer(
         {
+          ...minimalInitialState,
           recipes: [dummyRecipe],
         },
         { type: addRecipe.type, payload: dummyRecipe2 }
       )
-    ).toEqual({
+    ).toMatchObject({
       recipes: [dummyRecipe, dummyRecipe2],
     })
   })
 
   it('should shuffle recipes', () => {
     // Using the large set of data to reduce chance of shuffle not changing order
-    const shuffled = recipeReducer(defaultState, {
+    const shuffled = recipeDataReducer(defaultState, {
       type: shuffleRecipes.type,
       payload: 0,
     })
@@ -57,6 +61,6 @@ describe('recipe data reducer', () => {
 
     expect(shuffled.recipes).toHaveLength(defaultState.recipes.length)
 
-    expect(shuffled).toMatchSnapshot()
+    expect(shuffled.recipes).toMatchSnapshot()
   })
 })

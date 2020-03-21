@@ -1,10 +1,11 @@
 import combinedRecipeReducer from './combined'
 
 import { Recipe, removeRecipe, makeRecipe, toggleDescription } from '.'
+import { minimalInitialState } from './recipeDataSlice'
 
 // Not using the default from combinedRecipeReducer to avoid default recipes
 const defaultState: ReturnType<typeof combinedRecipeReducer> = {
-  recipes: { recipes: [] },
+  recipes: minimalInitialState,
   recipeUi: { index: 0, showDescription: false },
 }
 
@@ -34,6 +35,7 @@ describe('combined recipe reducer', () => {
           ...defaultState,
           recipes: {
             recipes: [dummyRecipe],
+            rehydrated: true,
           },
         },
         { type: removeRecipe.type, payload: 0 }
@@ -50,6 +52,7 @@ describe('combined recipe reducer', () => {
           ...defaultState,
           recipes: {
             recipes: [dummyRecipe, dummyRecipe2],
+            rehydrated: true,
           },
         },
         { type: removeRecipe.type, payload: 1 }
@@ -64,6 +67,7 @@ describe('combined recipe reducer', () => {
           ...defaultState,
           recipes: {
             recipes: [dummyRecipe, dummyRecipe2],
+            rehydrated: true,
           },
         },
         { type: removeRecipe.type, payload: 0 }
@@ -80,6 +84,7 @@ describe('combined recipe reducer', () => {
           ...defaultState,
           recipes: {
             recipes: [dummyRecipe, dummyRecipe2],
+            rehydrated: true,
           },
         },
         { type: makeRecipe.type }
@@ -90,7 +95,10 @@ describe('combined recipe reducer', () => {
 
     expect(
       combinedRecipeReducer(
-        { ...defaultState, recipes: { recipes: [dummyRecipe, dummyRecipe2] } },
+        {
+          ...defaultState,
+          recipes: { recipes: [dummyRecipe, dummyRecipe2], rehydrated: true },
+        },
         { type: makeRecipe.type, payload: 1 }
       )
     ).toMatchObject({
@@ -104,6 +112,7 @@ describe('combined recipe reducer', () => {
         ...defaultState,
         recipes: {
           recipes: [dummyRecipe, dummyRecipe2, dummyRecipe3],
+          rehydrated: true,
         },
       },
       { type: makeRecipe.type, payload: 1 }

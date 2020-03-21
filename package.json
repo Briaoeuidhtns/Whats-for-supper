@@ -20,7 +20,6 @@
     "@types/react-redux": "^7.1.5",
     "@types/webpack-env": "^1.14.1",
     "hash.js": "^1.1.7",
-    "install": "^0.13.0",
     "jest-junit-reporter": "^1.1.0",
     "pouchdb": "^7.1.1",
     "pouchdb-upsert": "^2.2.0",

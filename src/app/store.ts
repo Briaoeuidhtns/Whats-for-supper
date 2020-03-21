@@ -95,20 +95,7 @@ const sentryReporter: Middleware = store => next => action => {
 const store = configureStore({
   reducer: rootReducer,
   devTools: process.env.NODE_ENV !== 'production',
-  middleware: [
-    sentryReporter,
-    ...getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [
-          // redux-persist uses non serializable functions in the PERSIST action
-          // This isn't great practice, but it's pretty harmless
-          // Only disable their action to keep checking for our own
-          // https://github.com/rt2zz/redux-persist/issues/988
-          //PERSIST,
-        ],
-      },
-    }),
-  ],
+  middleware: [sentryReporter, ...getDefaultMiddleware()],
 })
 
 testAwait(initialget())
@@ -124,5 +111,3 @@ observeStore(store, state => testAwait(addfirst(state)))
 export type AppDispatch = typeof store.dispatch
 
 export default store
-
-//export { persistor }

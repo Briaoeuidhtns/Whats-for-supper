@@ -5,7 +5,7 @@ import * as serviceWorker from './serviceWorker'
 import * as Sentry from '@sentry/browser'
 
 import App from './components/App'
-import store from './app/store' //, { persistor } 
+import store from './app/store'
 import ErrorBoundary from 'components/ErrorBoundary'
 
 import { version as release } from '../package.json'

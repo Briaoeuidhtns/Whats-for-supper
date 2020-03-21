@@ -1,4 +1,5 @@
 export * from './recipeDataSlice'
+export * from './couchDataSlice'
 
 export * from './uiSlice'
 

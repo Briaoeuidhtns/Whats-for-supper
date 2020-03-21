@@ -1,10 +1,7 @@
-import { createSlice, PayloadAction, createAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from 'app/rootReducer'
 import { sha1 as hash } from 'hash.js'
 import InitialRecipes from 'recipes'
-import { Model } from 'app/db'
-import { Reducer } from 'redux'
-import { isReduxInternalAction } from 'util/types/redux'
 
 export interface Recipe {
   title: string
@@ -21,11 +18,6 @@ export interface RecipeListState {
 
 export const initialState: RecipeListState = {
   recipes: InitialRecipes,
-  rehydrated: false,
-}
-
-export const minimalInitialState: RecipeListState = {
-  recipes: [],
   rehydrated: false,
 }
 
@@ -60,35 +52,8 @@ const recipeDataSlice = createSlice({
   },
 })
 
-export const getFromCouch = createAction<Model>(
-  `${recipeDataSlice.name}/getFromCouch`
-)
-
-export const addDefaultRecipes = createAction(
-  `${recipeDataSlice.name}/addInitialRecipes`
-)
-
-const getFromCouchReducer: Reducer<RecipeListState> = (state, action) => {
-  if (getFromCouch.match(action))
-    return { ...action.payload.state.recipes, rehydrated: true }
-
-  if (addDefaultRecipes.match(action))
-    return { ...recipeDataSlice.reducer(undefined, action), rehydrated: true }
-
-  if (!state?.rehydrated)
-    if (isReduxInternalAction(action)) return minimalInitialState
-    else
-      throw new Error(
-        `Action dispatched before rehydrated: ${JSON.stringify(action)}`
-      )
-
-  return recipeDataSlice.reducer(state, action)
-}
-
 export const { addRecipe, shuffleRecipes } = recipeDataSlice.actions
 
 export const selectRecipes = (state: RootState) => state.recipes.recipes
 
-export default getFromCouchReducer
-
-export const recipeDataReducer = recipeDataSlice.reducer
+export default recipeDataSlice.reducer

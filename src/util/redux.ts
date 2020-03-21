@@ -1,14 +1,15 @@
 import { Store } from 'redux'
-import { isEqual } from 'lodash'
+import { isEqual, identity } from 'lodash'
 
-export const observeStore = <StoreT extends Store>(
+export const observeStore = <StoreT extends Store, T>(
   mstore: StoreT,
-  onChange: (state: ReturnType<StoreT['getState']>) => void
+  onChange: (t: T) => void,
+  selector: (state: ReturnType<StoreT['getState']>) => T = identity
 ) => {
-  let currentState: ReturnType<StoreT['getState']>
+  let currentState: T
 
   const handleChange = () => {
-    let nextState = mstore.getState()
+    let nextState = selector(mstore.getState())
     if (!isEqual(nextState, currentState)) {
       currentState = nextState
       onChange(currentState)

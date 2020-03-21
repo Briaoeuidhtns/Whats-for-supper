@@ -1,12 +1,17 @@
-import recipeReducer, {
+import recipeDataReducer, {
   Recipe,
   addRecipe,
   shuffleRecipes,
-  minimalInitialState,
-  recipeDataReducer,
+  RecipeListState,
+  // minimalInitialState,
+  // getFromCouch,
+  // addDefaultRecipes,
 } from './recipeDataSlice'
+import { Action } from 'redux'
+import { isReduxInternalAction } from 'util/types/redux'
 
 const defaultState = recipeDataReducer(undefined, { type: undefined })
+const minimalInitialState: RecipeListState = { recipes: [], rehydrated: true }
 
 const dummyRecipe: Recipe = {
     title: 'Dummy Recipe',

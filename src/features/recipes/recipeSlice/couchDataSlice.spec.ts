@@ -16,6 +16,7 @@ const dummyRecipe: Recipe = {
   title: 'Dummy Recipe',
   description: 'Dummy Recipe Description',
   rating: 3,
+  tags: [],
 }
 
 describe('get from couch reducer', () => {

@@ -1,23 +1,23 @@
-import React from 'react'
-import { render } from 'react-dom'
-import { Provider } from 'react-redux'
-import * as serviceWorker from './serviceWorker'
 import * as Sentry from '@sentry/browser'
+import * as serviceWorker from './serviceWorker'
 
-import App from './components/App'
-import store from './app/store'
-import ErrorBoundary from 'components/ErrorBoundary'
-
-import { version as release } from '../package.json'
 import { initVoiceRecognition, voiceReduxAdaptor } from 'features/voice'
 import {
+  makeRecipe,
   nextRecipe,
   prevRecipe,
-  makeRecipe,
 } from 'features/recipes/recipeSlice'
-import RehydrateGuard from 'components/RehydrateGuard'
+
+import App from './components/App'
+import ErrorBoundary from 'components/ErrorBoundary'
 import { LinearProgress } from '@material-ui/core'
+import { Provider } from 'react-redux'
+import React from 'react'
+import RehydrateGuard from 'components/RehydrateGuard'
 import { init as initDB } from 'app/db'
+import { version as release } from '../package.json'
+import { render } from 'react-dom'
+import store from './app/store'
 import useStyles from 'globalStyle'
 
 Sentry.init({

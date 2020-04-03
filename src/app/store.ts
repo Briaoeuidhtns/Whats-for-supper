@@ -1,9 +1,11 @@
 import * as Sentry from '@sentry/browser'
+
 import {
+  Middleware,
   configureStore,
   getDefaultMiddleware,
-  Middleware,
 } from '@reduxjs/toolkit'
+
 import rootReducer from './rootReducer'
 
 const sentryReporter: Middleware = store => next => action => {

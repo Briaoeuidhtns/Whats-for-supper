@@ -1,31 +1,30 @@
-import React, { useState, useRef } from 'react'
-import { connect } from 'react-redux'
-import { createSelector } from '@reduxjs/toolkit'
-
-import RecipeCard from './RecipeCard'
-import {
-  selectRecipes,
-  removeRecipe,
-  nextRecipe,
-  selectIndex,
-  selectShowDescription,
-  toggleDescription,
-  availabilityStateMap,
-  Recipe,
-  prevRecipe,
-} from './recipeSlice'
 import {
   Box,
+  IconButton,
+  ListItemIcon,
   Menu,
   MenuItem,
-  ListItemIcon,
-  IconButton,
   makeStyles,
 } from '@material-ui/core'
-import { useWindowSize, useElSize } from 'util/hooks'
 import { Delete as DeleteIcon, MoreVert as MenuIcon } from '@material-ui/icons'
+import React, { useRef, useState } from 'react'
+import {
+  Recipe,
+  availabilityStateMap,
+  nextRecipe,
+  prevRecipe,
+  removeRecipe,
+  selectIndex,
+  selectRecipes,
+  selectShowDescription,
+  toggleDescription,
+} from './recipeSlice'
+import { animated, useSpring } from 'react-spring'
+import { useElSize, useWindowSize } from 'util/hooks'
 
-import { useSpring, animated } from 'react-spring'
+import RecipeCard from './RecipeCard'
+import { connect } from 'react-redux'
+import { createSelector } from '@reduxjs/toolkit'
 import { useDrag } from 'react-use-gesture'
 
 const TUTORIAL_RECIPE: Readonly<Recipe> = {

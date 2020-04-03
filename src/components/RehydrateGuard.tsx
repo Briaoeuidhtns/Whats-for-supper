@@ -1,6 +1,6 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import { RootState } from 'app/rootReducer'
+import { useSelector } from 'react-redux'
 
 interface Props {
   loading?: React.ReactNode

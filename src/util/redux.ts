@@ -1,5 +1,6 @@
+import { identity, isEqual } from 'lodash'
+
 import { Store } from 'redux'
-import { isEqual, identity } from 'lodash'
 
 export const observeStore = <StoreT extends Store, T>(
   mstore: StoreT,

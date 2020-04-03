@@ -1,20 +1,18 @@
-import React from 'react'
-import { connect } from 'react-redux'
-
 import { Button, ButtonGroup } from '@material-ui/core'
 import {
-  NavigateBefore as PrevIcon,
   NavigateNext as NextIcon,
+  NavigateBefore as PrevIcon,
 } from '@material-ui/icons'
-
 import {
+  availabilityStateMap,
+  makeRecipe,
   nextRecipe,
   prevRecipe,
-  availabilityStateMap,
   selectIndex,
-  makeRecipe,
 } from './recipeSlice'
 
+import React from 'react'
+import { connect } from 'react-redux'
 import { createSelector } from '@reduxjs/toolkit'
 
 const mapState = createSelector(

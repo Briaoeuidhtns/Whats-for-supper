@@ -1,6 +1,8 @@
-import React, { ErrorInfo } from 'react'
 import * as Sentry from '@sentry/browser'
+
 import { Button, Container, Typography } from '@material-ui/core'
+import React, { ErrorInfo } from 'react'
+
 import store from '../app/store'
 
 interface Props {}

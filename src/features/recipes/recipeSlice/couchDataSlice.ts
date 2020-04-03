@@ -1,9 +1,10 @@
+import recipeDataReducer, { RecipeListState } from './recipeDataSlice'
+
+import { InvalidReducerCallError } from 'util/errors'
 import { Model } from 'app/db'
 import { Reducer } from 'redux'
-import { isReduxInternalAction } from 'util/types/redux'
-import { InvalidReducerCallError } from 'util/errors'
 import { createAction } from '@reduxjs/toolkit'
-import recipeDataReducer, { RecipeListState } from './recipeDataSlice'
+import { isReduxInternalAction } from 'util/types/redux'
 
 export type Rehydratable<State> = State & { rehydrated?: true }
 

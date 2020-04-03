@@ -1,7 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+
+import InitialRecipes from 'recipes'
 import { RootState } from 'app/rootReducer'
 import { sha1 as hash } from 'hash.js'
-import InitialRecipes from 'recipes'
 
 export interface Recipe {
   title: string

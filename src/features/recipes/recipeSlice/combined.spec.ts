@@ -1,6 +1,6 @@
-import combinedRecipeReducer from './combined'
+import { Recipe, makeRecipe, minimalInitialState, removeRecipe } from '.'
 
-import { Recipe, removeRecipe, makeRecipe, minimalInitialState } from '.'
+import combinedRecipeReducer from './combined'
 
 // Not using the default from combinedRecipeReducer to avoid default recipes
 const defaultState: ReturnType<typeof combinedRecipeReducer> = {

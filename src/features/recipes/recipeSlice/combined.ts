@@ -1,8 +1,9 @@
-import reduceReducers from 'reduce-reducers'
-import recipes from './couchDataSlice'
-import recipeUi from './uiSlice'
-import { createReducer, combineReducers } from '@reduxjs/toolkit'
+import { combineReducers, createReducer } from '@reduxjs/toolkit'
 import { makeRecipe, removeRecipe } from './combinedActions'
+
+import recipeUi from './uiSlice'
+import recipes from './couchDataSlice'
+import reduceReducers from 'reduce-reducers'
 
 const recipeReducer = combineReducers({ recipes, recipeUi })
 

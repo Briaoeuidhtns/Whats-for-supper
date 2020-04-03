@@ -1,11 +1,13 @@
 import _recipeDataReducer, { Recipe } from './recipeDataSlice'
 import getFromCouchReducer, {
-  minimalInitialState,
-  getFromCouch,
   addDefaultRecipes,
+  getFromCouch,
+  minimalInitialState,
 } from './couchDataSlice'
+
 import { Action } from 'redux'
 import { isReduxInternalAction } from 'util/types/redux'
+
 jest.mock('./recipeDataSlice')
 
 const recipeDataReducer = _recipeDataReducer as jest.MockedFunction<

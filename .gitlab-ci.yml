@@ -20,6 +20,15 @@ install:
   script: yarn
 
 
+typecheck tests:
+  stage: validate
+  tags:
+    - Ubuntu 18.04
+
+  script:
+    - yarn tsc
+
+
 test unit:
   stage: validate
   tags:
@@ -34,6 +43,7 @@ test unit:
       junit: test-report.xml
     paths:
       - test-report.xml
+
 
 check format:
   stage: validate

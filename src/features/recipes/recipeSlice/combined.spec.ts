@@ -11,15 +11,18 @@ const defaultState: ReturnType<typeof combinedRecipeReducer> = {
 const dummyRecipe: Recipe = {
     title: 'Dummy Recipe',
     description: 'Dummy Recipe Description',
+    tags: ['Dummy Tag'],
     rating: 3,
   },
   dummyRecipe2: Recipe = {
     title: 'Dummy Recipe 2',
     description: 'Dummy Recipe 2 Description',
+    tags: ['Dummy Tag'],
   },
   dummyRecipe3: Recipe = {
     title: 'Dummy Recipe 3',
     description: 'Dummy Recipe 3 Description',
+    tags: ['Dummy Tag'],
     rating: 5,
   }
 

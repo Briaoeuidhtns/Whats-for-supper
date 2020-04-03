@@ -13,12 +13,10 @@ export interface Recipe {
 
 export interface RecipeListState {
   recipes: Recipe[]
-  rehydrated: boolean
 }
 
 export const initialState: RecipeListState = {
   recipes: InitialRecipes,
-  rehydrated: false,
 }
 
 // To the best of my knowledge, this generates a normalish distribution

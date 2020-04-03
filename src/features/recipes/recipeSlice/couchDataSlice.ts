@@ -5,16 +5,21 @@ import { InvalidReducerCallError } from 'util/errors'
 import { createAction } from '@reduxjs/toolkit'
 import recipeDataReducer, { RecipeListState } from './recipeDataSlice'
 
-export const minimalInitialState: RecipeListState = {
+export type Rehydratable<State> = State & { rehydrated?: true }
+
+export const minimalInitialState: Rehydratable<RecipeListState> = {
   recipes: [],
-  rehydrated: false,
+  rehydrated: undefined,
 }
 
 export const getFromCouch = createAction<Model>('couchdb/getFromCouch')
 
 export const addDefaultRecipes = createAction('couchdb/addInitialRecipes')
 
-const getFromCouchReducer: Reducer<RecipeListState> = (state, action) => {
+const getFromCouchReducer: Reducer<Rehydratable<RecipeListState>> = (
+  state,
+  action
+) => {
   if (getFromCouch.match(action))
     return { ...action.payload.state, rehydrated: true }
 

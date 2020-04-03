@@ -1,14 +1,11 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { PersistGate } from 'redux-persist/integration/react'
 import { Provider } from 'react-redux'
 import * as serviceWorker from './serviceWorker'
 import * as Sentry from '@sentry/browser'
 
-import { CircularProgress } from '@material-ui/core'
-
 import App from './components/App'
-import store, { persistor } from './app/store'
+import store from './app/store'
 import ErrorBoundary from 'components/ErrorBoundary'
 
 import { version as release } from '../package.json'
@@ -18,6 +15,9 @@ import {
   prevRecipe,
   makeRecipe,
 } from 'features/recipes/recipeSlice'
+import RehydrateGuard from 'components/RehydrateGuard'
+import { LinearProgress } from '@material-ui/core'
+import { init as initDB } from 'app/db'
 
 Sentry.init({
   dsn: 'https://60a4c38b006549769ba249366b78887b@sentry.io/1850302',
@@ -25,12 +25,21 @@ Sentry.init({
   environment: process.env.NODE_ENV,
 })
 
+initDB(store, {
+  host: process.env.REACT_APP_COUCHDB_HOST,
+  port:
+    (process.env.REACT_APP_COUCHDB_PORT &&
+      parseInt(process.env.REACT_APP_COUCHDB_PORT)) ||
+    undefined,
+  name: process.env.REACT_APP_COUCHDB_DB,
+})
+
 render(
   <ErrorBoundary>
     <Provider store={store}>
-      <PersistGate loading={<CircularProgress />} persistor={persistor}>
+      <RehydrateGuard loading={<LinearProgress />}>
         <App />
-      </PersistGate>
+      </RehydrateGuard>
     </Provider>
   </ErrorBoundary>,
   document.getElementById('root')

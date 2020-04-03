@@ -9,6 +9,10 @@
 /coverage
 source-map.html
 
+# pouchdb testing
+/cards 
+
+
 # production
 /build
 

@@ -1,5 +1,5 @@
 import reduceReducers from 'reduce-reducers'
-import recipes from './recipeDataSlice'
+import recipes from './couchDataSlice'
 import recipeUi from './uiSlice'
 import { createReducer, combineReducers } from '@reduxjs/toolkit'
 import { makeRecipe, removeRecipe } from './combinedActions'

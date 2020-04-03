@@ -15,7 +15,7 @@ cache:
 install:
   stage: .pre
   tags:
-    - Ubuntu 18.04
+    - Docker
 
   script: yarn
 
@@ -23,9 +23,10 @@ install:
 test unit:
   stage: validate
   tags:
-    - Ubuntu 18.04
+    - Docker
 
   script:
+    - yarn
     - yarn test-junit
 
   artifacts:
@@ -37,17 +38,19 @@ test unit:
 check format:
   stage: validate
   tags:
-    - Ubuntu 18.04
+    - Docker
 
   script:
+    - yarn
     - yarn check-format
 
 build:
   stage: build
   tags:
-    - Ubuntu 18.04
+    - Docker
 
   script:
+    - yarn
     - yarn build
 
   artifacts:
@@ -58,9 +61,10 @@ build:
 source_map:
   stage: analyze
   tags:
-    - Ubuntu 18.04
+    - Docker
 
   script:
+    - yarn
     - yarn explore --html source-map-explorer.html
 
   artifacts:

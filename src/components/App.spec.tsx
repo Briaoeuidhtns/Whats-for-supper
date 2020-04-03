@@ -1,9 +1,9 @@
+import App from './App'
+import { Provider } from 'react-redux'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './App'
-import store from '../app/store'
-import { Provider } from 'react-redux'
 import { pending } from 'util/test'
+import store from '../app/store'
 
 it('renders without crashing', async () => {
   const div = document.createElement('div')

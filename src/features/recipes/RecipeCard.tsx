@@ -1,27 +1,24 @@
-import React from 'react'
-
 import {
   Box,
   Card,
-  CardHeader,
+  CardActions,
   CardContent,
+  CardHeader,
   CardMedia,
-  Typography,
+  Chip,
   Collapse,
   IconButton,
-  CardActions,
-  Chip,
+  Typography,
 } from '@material-ui/core'
-
-import { makeStyles } from '@material-ui/core/styles'
-import { Rating } from '@material-ui/lab'
-
 import {
-  ExpandMore as ExpandMoreIcon,
   ExpandLess as ExpandLessIcon,
+  ExpandMore as ExpandMoreIcon,
 } from '@material-ui/icons'
 
+import { Rating } from '@material-ui/lab'
+import React from 'react'
 import { Recipe } from './recipeSlice'
+import { makeStyles } from '@material-ui/core/styles'
 
 interface IconProps {
   expand: boolean

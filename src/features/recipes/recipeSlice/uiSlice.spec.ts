@@ -1,10 +1,10 @@
-import uiReducer, {
-  prevRecipe,
-  nextRecipe,
-  toggleDescription,
-  availabilityStateMap,
-} from './uiSlice'
 import { Recipe, makeRecipe } from '.'
+import uiReducer, {
+  availabilityStateMap,
+  nextRecipe,
+  prevRecipe,
+  toggleDescription,
+} from './uiSlice'
 
 const defaultState = uiReducer(undefined, { type: undefined })
 

@@ -1,24 +1,23 @@
-import React, { useState } from 'react'
-import { connect } from 'react-redux'
-import { Rating } from '@material-ui/lab'
-
 import {
-  TextField,
-  Button,
   Box,
-  Fab,
+  Button,
   Dialog,
-  DialogTitle,
   DialogActions,
   DialogContent,
   DialogContentText,
+  DialogTitle,
+  Fab,
+  TextField,
   Typography,
 } from '@material-ui/core'
-import { Add as AddIcon } from '@material-ui/icons'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-
+import React, { useState } from 'react'
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles'
 import { addRecipe, removeRecipe } from './recipeSlice'
+
+import { Add as AddIcon } from '@material-ui/icons'
+import { Rating } from '@material-ui/lab'
 import TagInput from 'components/TagInput'
+import { connect } from 'react-redux'
 
 const mapDispatch = { addRecipe, removeRecipe }
 

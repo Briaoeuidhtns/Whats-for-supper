@@ -1,6 +1,7 @@
-import React from 'react'
 import { Box, Chip, TextField } from '@material-ui/core'
+
 import { Autocomplete } from '@material-ui/lab'
+import React from 'react'
 
 interface Props {
   recipeTags: string[]

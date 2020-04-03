@@ -1,16 +1,17 @@
+import {
+  RecipeListState,
+  addDefaultRecipes,
+  getFromCouch,
+  shuffleRecipes,
+} from '../features/recipes/recipeSlice'
+
+import PouchDB from 'pouchdb'
+import { RootState } from 'app/rootReducer'
+import { Store } from 'app/store'
+import Upsert from 'pouchdb-upsert'
+import { isPouchDBError } from 'util/types/pouchdb'
 import { observeStore } from 'util/redux'
 import { testAwait } from 'util/test'
-import { Store } from 'app/store'
-import { RootState } from 'app/rootReducer'
-import { isPouchDBError } from 'util/types/pouchdb'
-import PouchDB from 'pouchdb'
-import Upsert from 'pouchdb-upsert'
-import {
-  shuffleRecipes,
-  getFromCouch,
-  addDefaultRecipes,
-  RecipeListState,
-} from '../features/recipes/recipeSlice'
 
 PouchDB.plugin(Upsert)
 

@@ -1,11 +1,8 @@
 import recipeDataReducer, {
   Recipe,
+  RecipeListState,
   addRecipe,
   shuffleRecipes,
-  RecipeListState,
-  // minimalInitialState,
-  // getFromCouch,
-  // addDefaultRecipes,
 } from './recipeDataSlice'
 
 const defaultState = recipeDataReducer(undefined, { type: undefined })

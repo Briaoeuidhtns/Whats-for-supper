@@ -1,5 +1,6 @@
+import { Action, ActionCreator, Dispatch } from 'redux'
+
 import { last } from 'lodash'
-import { ActionCreator, Action, Dispatch } from 'redux'
 
 export type VoiceActionCallback = (result: string) => void
 

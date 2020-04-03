@@ -1,6 +1,7 @@
 import React from 'react'
 
 import {
+  Box,
   Card,
   CardHeader,
   CardContent,
@@ -43,11 +44,11 @@ const useStyles = makeStyles({
   },
 })
 
-interface OwnProps {
+interface OwnProps extends React.ComponentPropsWithoutRef<typeof Card> {
   recipe: Recipe
   placeholder?: string
-  showDescription: boolean
-  toggleDescription: React.MouseEventHandler<HTMLButtonElement>
+  showDescription?: boolean
+  toggleDescription?: React.MouseEventHandler<HTMLButtonElement>
   menuButton?: React.ReactNode
 }
 
@@ -59,11 +60,12 @@ const RecipeCard: React.FC<Props> = ({
   showDescription,
   toggleDescription,
   menuButton,
+  ...props
 }) => {
   const classes = useStyles()
 
   return (
-    <Card>
+    <Card {...props}>
       <CardMedia
         className={classes.media}
         image={recipe.image ?? placeholder ?? defaultPlaceholder}
@@ -72,11 +74,11 @@ const RecipeCard: React.FC<Props> = ({
       <CardHeader title={recipe.title} action={menuButton} />
 
       <CardContent>
-        <div>
+        <Box>
           {recipe.tags.map((txt, i) => (
             <Chip label={txt} key={i} />
           ))}
-        </div>
+        </Box>
         <Rating name="recipeRating" value={recipe.rating ?? null} readOnly />
       </CardContent>
 
@@ -86,7 +88,7 @@ const RecipeCard: React.FC<Props> = ({
           onClick={toggleDescription}
           disabled={!recipe.description}
         >
-          <ExpandableIcon expand={showDescription} />
+          <ExpandableIcon expand={showDescription ?? false} />
         </IconButton>
       </CardActions>
 

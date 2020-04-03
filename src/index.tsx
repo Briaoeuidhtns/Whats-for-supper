@@ -18,6 +18,7 @@ import {
 import RehydrateGuard from 'components/RehydrateGuard'
 import { LinearProgress } from '@material-ui/core'
 import { init as initDB } from 'app/db'
+import useStyles from 'globalStyle'
 
 Sentry.init({
   dsn: 'https://60a4c38b006549769ba249366b78887b@sentry.io/1850302',
@@ -34,16 +35,20 @@ initDB(store, {
   name: process.env.REACT_APP_COUCHDB_DB,
 })
 
-render(
-  <ErrorBoundary>
-    <Provider store={store}>
-      <RehydrateGuard loading={<LinearProgress />}>
-        <App />
-      </RehydrateGuard>
-    </Provider>
-  </ErrorBoundary>,
-  document.getElementById('root')
-)
+const Configured: React.FC = () => {
+  useStyles()
+
+  return (
+    <ErrorBoundary>
+      <Provider store={store}>
+        <RehydrateGuard loading={<LinearProgress />}>
+          <App />
+        </RehydrateGuard>
+      </Provider>
+    </ErrorBoundary>
+  )
+}
+render(<Configured />, document.getElementById('root'))
 
 initVoiceRecognition?.(
   voiceReduxAdaptor(store.dispatch, {

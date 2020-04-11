@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.js": "/Whats-for-supper/static/js/main.4d1012e1.chunk.js",
+    "main.js.map": "/Whats-for-supper/static/js/main.4d1012e1.chunk.js.map",
+    "runtime-main.js": "/Whats-for-supper/static/js/runtime-main.a1e9c9d3.js",
+    "runtime-main.js.map": "/Whats-for-supper/static/js/runtime-main.a1e9c9d3.js.map",
+    "static/js/2.fd25f3fd.chunk.js": "/Whats-for-supper/static/js/2.fd25f3fd.chunk.js",
+    "static/js/2.fd25f3fd.chunk.js.map": "/Whats-for-supper/static/js/2.fd25f3fd.chunk.js.map",
+    "index.html": "/Whats-for-supper/index.html",
+    "precache-manifest.5e786419262219a3366602e1ce075aed.js": "/Whats-for-supper/precache-manifest.5e786419262219a3366602e1ce075aed.js",
+    "service-worker.js": "/Whats-for-supper/service-worker.js",
+    "static/js/2.fd25f3fd.chunk.js.LICENSE": "/Whats-for-supper/static/js/2.fd25f3fd.chunk.js.LICENSE"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a1e9c9d3.js",
+    "static/js/2.fd25f3fd.chunk.js",
+    "static/js/main.4d1012e1.chunk.js"
+  ]
+}

@@ -111,7 +111,7 @@ const RecipeList: React.FC<Props> = ({
     ({ down, movement: [mx], xy: [abs_x], swipe: [swipe] }) => {
       if (!isLeaving.current) {
         setSpring({ x: down ? mx : 0 })
-        if (swipe || Math.abs(width - abs_x) > edgeThreshold) {
+        if (swipe || Math.abs(width - abs_x) < edgeThreshold) {
           setSpring({
             opacity: 0,
             // Width not defined in node environments, ie tests

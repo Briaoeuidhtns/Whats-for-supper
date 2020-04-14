@@ -8,17 +8,19 @@ import {
   Chip,
   Collapse,
   IconButton,
-  Typography,
 } from '@material-ui/core'
 import {
   ExpandLess as ExpandLessIcon,
   ExpandMore as ExpandMoreIcon,
 } from '@material-ui/icons'
 
+import Markdown from 'react-markdown'
 import { Rating } from '@material-ui/lab'
 import React from 'react'
 import { Recipe } from './recipeSlice'
 import { makeStyles } from '@material-ui/core/styles'
+
+import markdownConfig from 'components/Markdown'
 
 interface IconProps {
   expand: boolean
@@ -95,9 +97,7 @@ const RecipeCard: React.FC<Props> = ({
         unmountOnExit
       >
         <CardContent>
-          <Typography paragraph variant="body2" color="textSecondary">
-            {recipe.description}
-          </Typography>
+          <Markdown {...markdownConfig} source={recipe.description} />
         </CardContent>
       </Collapse>
     </Card>

@@ -50,6 +50,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe }) => {
   const classes = useStyles()
   const [open, setOpen] = useState(false)
   const dispatch = useDispatch()
+  //const [test, setTest] = useState(false)
   //const [recipeText, setRecipeText] = useState('')
   //const [recipeRating, setRecipeRating] = useState<number | undefined>()
   //const [recipeDescription, setRecipeDescription] = useState('')

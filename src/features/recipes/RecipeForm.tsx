@@ -1,3 +1,5 @@
+import * as yup from 'yup'
+
 import {
   Button,
   Dialog,
@@ -27,6 +29,23 @@ const selectEdit = (state: RootState) => {
 
   return { recipe: undefined, index }
 }
+
+const dialogValidationSchema = yup.object({
+  title: yup
+    .string()
+    .required()
+    .max(50),
+  description: yup
+    .string()
+    .notRequired()
+    .max(500),
+  rating: yup
+    .number()
+    .notRequired()
+    .min(0)
+    .max(5),
+  tags: yup.array().of(yup.string().max(25)),
+})
 
 const FormDialog: React.FC = () => {
   const dispatch = useDispatch()
@@ -60,6 +79,7 @@ const FormDialog: React.FC = () => {
       enableReinitialize
       initialValues={initialRecipe}
       onSubmit={onSubmit}
+      validationSchema={dialogValidationSchema}
     >
       {({ resetForm }) => (
         <Dialog

@@ -1,24 +1,29 @@
-import { Box, Chip, TextField } from '@material-ui/core'
+import { Chip, TextField } from '@material-ui/core'
 
 import { Autocomplete } from '@material-ui/lab'
 import React from 'react'
+import { useField } from 'formik'
 
 interface Props {
-  recipeTags: string[]
-  setRecipeTags: (tags: string[]) => unknown
+  name: string
 }
 
-const TagInput: React.FC<Props> = ({ recipeTags, setRecipeTags }) => (
-  <Box>
+const TagInput: React.FC<Props> = ({ name }) => {
+  const [bindForm] = useField<string[]>({
+    name,
+    type: 'input',
+    multiple: true,
+  })
+
+  return (
     <Autocomplete
-      multiple
+      {...bindForm}
       freeSolo
-      renderTags={(value = { recipeTags }, getTagProps) =>
-        value.map((option: React.ReactNode, index: any) => (
+      renderTags={(value: React.ReactNode[], getTagProps) =>
+        value.map((option, index) => (
           <Chip variant="outlined" label={option} {...getTagProps({ index })} />
         ))
       }
-      onChange={(_, newValue: string[]) => setRecipeTags(newValue)}
       renderInput={params => (
         <TextField
           {...params}
@@ -29,7 +34,7 @@ const TagInput: React.FC<Props> = ({ recipeTags, setRecipeTags }) => (
         />
       )}
     />
-  </Box>
-)
+  )
+}
 
 export default TagInput

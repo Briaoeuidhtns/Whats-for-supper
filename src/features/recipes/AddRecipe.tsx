@@ -1,24 +1,12 @@
-import {
-  Box,
-  //Button,
-  //Dialog,
-  //DialogActions,
-  //DialogContent,
-  //DialogContentText,
-  //DialogTitle,
-  Fab,
-  //TextField,
-  //Typography,
-} from '@material-ui/core'
-import React, { useState } from 'react'
+import { Box, Fab } from '@material-ui/core'
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles'
 import { addRecipe, removeRecipe } from './recipeSlice'
-import { openRecipeDialog } from './recipeSlice/uiSlice'
-import FormDialog from './RecipeForm'
-import { Add as AddIcon } from '@material-ui/icons'
-//import { Rating } from '@material-ui/lab'
-//import TagInput from 'components/TagInput'
 import { connect, useDispatch } from 'react-redux'
+
+import { Add as AddIcon } from '@material-ui/icons'
+import FormDialog from './RecipeForm'
+import React from 'react'
+import { openRecipeDialog } from './recipeSlice/uiSlice'
 
 const mapDispatch = { addRecipe, removeRecipe }
 
@@ -48,7 +36,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const AddRecipeDialog: React.FC<Props> = ({ addRecipe }) => {
   const classes = useStyles()
-  const [open, setOpen] = useState(false)
   const dispatch = useDispatch()
   //const [test, setTest] = useState(false)
   //const [recipeText, setRecipeText] = useState('')

@@ -42,7 +42,12 @@ const recipeDataSlice = createSlice({
     addRecipe(state, { payload: recipe }: PayloadAction<Recipe>) {
       state.recipes.push(recipe)
     },
-    editRecipe(state, { payload: { index, recipe } }: PayloadAction<{index: number, recipe: Partial<Recipe>}>) {
+    editRecipe(
+      state,
+      {
+        payload: { index, recipe },
+      }: PayloadAction<{ index: number; recipe: Partial<Recipe> }>
+    ) {
       state.recipes[index] = { ...state.recipes[index], ...recipe }
     },
     shuffleRecipes(state, { payload: salt }: PayloadAction<any>) {

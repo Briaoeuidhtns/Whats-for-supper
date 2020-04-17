@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "husky": "^4.2.3",
+    "import-sort-cli": "^6.0.0",
     "jest-junit-reporter": "^1.1.0",
     "lint-staged": "^10.0.8",
     "prettier": "1.19.1",
@@ -78,6 +79,7 @@
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
       "prettier --write",
+      "import-sort --write",
       "eslint --fix"
     ]
   },

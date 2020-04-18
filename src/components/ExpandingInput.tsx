@@ -1,8 +1,4 @@
-import {
-  InputBaseComponentProps,
-  createStyles,
-  makeStyles,
-} from '@material-ui/core'
+import { InputBaseComponentProps, makeStyles } from '@material-ui/core'
 import React, { useLayoutEffect, useRef, useState } from 'react'
 
 import clsx from 'clsx'
@@ -19,7 +15,7 @@ type StyleProps = {
   maxWidth: string | number | undefined
 }
 const useStyles = makeStyles({
-  fakeInput: {
+  expandingInput: {
     minWidth: ({ minWidth }: StyleProps) => minWidth,
     width: ({ width }) => width,
     maxWidth: ({ maxWidth }) => maxWidth,
@@ -29,6 +25,8 @@ const useStyles = makeStyles({
 /**
  * An input that resizes to fit content.
  * Rather expensive as it creates a dummy field to measure on changes during layout
+ *
+ * __DOES NOT BEHAVE CORRECTLY IF UNCONTROLLED__
  *
  * The only alternative I found was contenteditable on a span, but does not play well with react
  *
@@ -41,13 +39,13 @@ const ExpandingInput: React.FC<InputBaseComponentProps & Props> = ({
   padWidth = 10,
   ...props
 }) => {
-  const { value } = props
+  const { value = '' } = props
 
   const ref = useRef<HTMLInputElement>(null)
 
   const [width, setWidth] = useState(minWidth)
   const classes = useStyles({ minWidth, width, maxWidth })
-  const className = clsx(classes.fakeInput, propClassName)
+  const className = clsx(classes.expandingInput, propClassName)
 
   useLayoutEffect(() => {
     // Loosely based on https://stackoverflow.com/a/7168967/2384326

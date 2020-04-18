@@ -30,14 +30,14 @@ const selectEdit = (state: RootState) => {
   return { recipe: undefined, index }
 }
 
-const dialogValidationSchema = yup.object({
+const dialogValidationSchema = yup.object<Recipe>({
   title: yup
     .string()
     .required()
     .max(50),
   description: yup
     .string()
-    .notRequired()
+    .ensure()
     .max(500),
   rating: yup
     .number()

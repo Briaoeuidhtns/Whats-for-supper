@@ -95,7 +95,6 @@ const FormDialog: React.FC = () => {
               <DialogContentText>Add your recipe information</DialogContentText>
               <TextField
                 name="title"
-                autoFocus
                 margin="dense"
                 label="Recipe Title"
                 fullWidth

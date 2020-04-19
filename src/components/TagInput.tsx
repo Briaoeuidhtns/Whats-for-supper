@@ -43,6 +43,9 @@ const TagInput: React.FC<Props> = props => {
     [name, onChange]
   )
 
+  // XXX The chip input probably shouldn't be autoFocus,
+  // but otherwise the fake input appears and steals focus
+  // then it defaults to the card background for some reason
   return (
     <Paper component="ul" className={classes.container}>
       {tags.slice(undefined, -1).map((tag, index) => (
@@ -63,6 +66,7 @@ const TagInput: React.FC<Props> = props => {
         label={
           <Input
             value={tags.slice(-1)[0]}
+            autoFocus
             inputComponent={ExpandingInput}
             name={name}
             {...bind}

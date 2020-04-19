@@ -52,11 +52,12 @@ const ExpandingInput: React.FC<InputBaseComponentProps & Props> = ({
     if (ref.current != null) {
       const test = document.createElement('input')
       test.className = className
+      test.style.position = 'absolute'
       test.style.padding = '0'
       test.style.width = '0'
-      test.style.position = 'absolute'
+      test.disabled = true
       test.value = value
-      ref.current.parentNode?.appendChild?.(test)
+      ref.current.insertAdjacentElement('afterend', test)
       setWidth(test.scrollWidth + padWidth)
       test.parentNode?.removeChild(test)
     }

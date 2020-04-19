@@ -1,23 +1,12 @@
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Fab,
-  TextField,
-  Typography,
-} from '@material-ui/core'
-import React, { useState } from 'react'
+import { Box, Fab } from '@material-ui/core'
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles'
 import { addRecipe, removeRecipe } from './recipeSlice'
+import { connect, useDispatch } from 'react-redux'
 
 import { Add as AddIcon } from '@material-ui/icons'
-import { Rating } from '@material-ui/lab'
-import TagInput from 'components/TagInput'
-import { connect } from 'react-redux'
+import FormDialog from './RecipeForm'
+import React from 'react'
+import { openRecipeDialog } from './recipeSlice/uiSlice'
 
 const mapDispatch = { addRecipe, removeRecipe }
 
@@ -47,13 +36,14 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const AddRecipeDialog: React.FC<Props> = ({ addRecipe }) => {
   const classes = useStyles()
-  const [open, setOpen] = useState(false)
-  const [recipeText, setRecipeText] = useState('')
-  const [recipeRating, setRecipeRating] = useState<number | undefined>()
-  const [recipeDescription, setRecipeDescription] = useState('')
-  const [recipeTags, setRecipeTags] = useState<string[]>([])
+  const dispatch = useDispatch()
+  //const [test, setTest] = useState(false)
+  //const [recipeText, setRecipeText] = useState('')
+  //const [recipeRating, setRecipeRating] = useState<number | undefined>()
+  //const [recipeDescription, setRecipeDescription] = useState('')
+  //const [recipeTags, setRecipeTags] = useState<string[]>([])
 
-  const submit = () => {
+  /*const submit = () => {
     setOpen(false)
     if (!recipeText.trim()) {
       return
@@ -76,16 +66,17 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe }) => {
     setRecipeRating(undefined)
     setRecipeDescription('')
     setRecipeTags([])
-  }
+  }*/
 
   return (
     <>
       <Box className={classes.fab}>
-        <Fab onClick={() => setOpen(true)}>
+        <Fab onClick={() => dispatch(openRecipeDialog())}>
           <AddIcon />
         </Fab>
       </Box>
-      <Dialog
+      <FormDialog />
+      {/*<Dialog
         open={open}
         onClose={cancel}
         //onKeyPress={e => e.key === 'Enter' && submit()}
@@ -142,7 +133,7 @@ const AddRecipeDialog: React.FC<Props> = ({ addRecipe }) => {
             Add
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog>*/}
     </>
   )
 }

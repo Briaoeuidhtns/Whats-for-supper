@@ -1,35 +1,97 @@
-import { Box, Chip, TextField } from '@material-ui/core'
+import { Chip, Input, Paper, createStyles, makeStyles } from '@material-ui/core'
+import React, { useCallback } from 'react'
 
-import { Autocomplete } from '@material-ui/lab'
-import React from 'react'
+import ExpandingInput from './ExpandingInput'
+import { useField } from 'formik'
 
 interface Props {
-  recipeTags: string[]
-  setRecipeTags: (tags: string[]) => unknown
+  name: string
 }
 
-const TagInput: React.FC<Props> = ({ recipeTags, setRecipeTags }) => (
-  <Box>
-    <Autocomplete
-      multiple
-      freeSolo
-      renderTags={(value = { recipeTags }, getTagProps) =>
-        value.map((option: React.ReactNode, index: any) => (
-          <Chip variant="outlined" label={option} {...getTagProps({ index })} />
-        ))
-      }
-      onChange={(_, newValue: string[]) => setRecipeTags(newValue)}
-      renderInput={params => (
-        <TextField
-          {...params}
-          variant="filled"
-          label="Recipe Tags"
-          placeholder=" "
-          fullWidth
+const useStyles = makeStyles(theme =>
+  createStyles({
+    container: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      listStyle: 'none',
+      padding: theme.spacing(0.5),
+    },
+    chip: {
+      margin: theme.spacing(0.5),
+    },
+  })
+)
+
+const TagInput: React.FC<Props> = props => {
+  const classes = useStyles()
+  const [{ name, value: tags, onChange, onBlur, ...bind }] = useField<string[]>(
+    {
+      ...props,
+      multiple: true,
+    }
+  )
+
+  const setTags = useCallback(
+    (value: string[]) => {
+      onChange({
+        target: {
+          name,
+          value,
+        },
+      })
+    },
+    [name, onChange]
+  )
+
+  // XXX The chip input probably shouldn't be autoFocus,
+  // but otherwise the fake input appears and steals focus
+  // then it defaults to the card background for some reason
+  return (
+    <Paper component="ul" className={classes.container}>
+      {tags.slice(undefined, -1).map((tag, index) => (
+        <Chip
+          key={index}
+          className={classes.chip}
+          label={tag}
+          onDelete={() => {
+            const newTags = [...tags]
+            newTags.splice(index, 1)
+            setTags(newTags)
+          }}
+        />
+      ))}
+      <Chip
+        key={tags.length - 1}
+        className={classes.chip}
+        label={
+          <Input
+            value={tags.slice(-1)[0]}
+            autoFocus
+            inputComponent={ExpandingInput}
+            name={name}
+            {...bind}
+            onChange={({ target }) =>
+              setTags([...tags.slice(undefined, -1), target.value])
+            }
+          />
+        }
+      />
+      {!!(tags.length && tags.slice(-1)[0] !== '') && (
+        <Chip
+          key={tags.length}
+          className={classes.chip}
+          label={
+            <Input
+              value=""
+              inputComponent={ExpandingInput}
+              name={name}
+              onChange={({ target }) => setTags([...tags, target.value])}
+            />
+          }
         />
       )}
-    />
-  </Box>
-)
+    </Paper>
+  )
+}
 
 export default TagInput

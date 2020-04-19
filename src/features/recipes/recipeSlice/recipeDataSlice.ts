@@ -42,6 +42,14 @@ const recipeDataSlice = createSlice({
     addRecipe(state, { payload: recipe }: PayloadAction<Recipe>) {
       state.recipes.push(recipe)
     },
+    editRecipe(
+      state,
+      {
+        payload: { index, recipe },
+      }: PayloadAction<{ index: number; recipe: Partial<Recipe> }>
+    ) {
+      state.recipes[index] = { ...state.recipes[index], ...recipe }
+    },
     shuffleRecipes(state, { payload: salt }: PayloadAction<any>) {
       state.recipes.sort(
         (a, b) =>
@@ -51,7 +59,7 @@ const recipeDataSlice = createSlice({
   },
 })
 
-export const { addRecipe, shuffleRecipes } = recipeDataSlice.actions
+export const { addRecipe, editRecipe, shuffleRecipes } = recipeDataSlice.actions
 
 export const selectRecipes = (state: RootState) => state.recipes.recipes
 

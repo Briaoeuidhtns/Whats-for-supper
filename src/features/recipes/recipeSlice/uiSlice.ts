@@ -1,19 +1,26 @@
-import { selectRecipes, shuffleRecipes } from './recipeDataSlice'
+import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit'
+import {
+  addRecipe,
+  editRecipe,
+  selectRecipes,
+  shuffleRecipes,
+} from './recipeDataSlice'
 
 import { RootState } from 'app/rootReducer'
-import { createSelector } from '@reduxjs/toolkit'
-import { createSlice } from '@reduxjs/toolkit'
 import { makeRecipe } from './combinedActions'
 
 export interface RecipeUiState {
   index: number
   showDescription: boolean
+  editing?: number
 }
 
 let initialState: RecipeUiState = {
   index: 0,
   showDescription: false,
 }
+
+export const NEW_RECIPE = -1
 
 const recipeSlice = createSlice({
   name: 'ui',
@@ -30,6 +37,15 @@ const recipeSlice = createSlice({
     toggleDescription(state) {
       state.showDescription = !state.showDescription
     },
+    openRecipeDialog(
+      state,
+      { payload: index = NEW_RECIPE }: PayloadAction<number | undefined>
+    ) {
+      state.editing = index
+    },
+    cancelEdit(state) {
+      state.editing = undefined
+    },
   },
   extraReducers: b => {
     b.addCase(makeRecipe, state => {
@@ -40,10 +56,22 @@ const recipeSlice = createSlice({
       state.index = 0
       state.showDescription = false
     })
+    b.addCase(addRecipe, state => {
+      state.editing = undefined
+    })
+    b.addCase(editRecipe, state => {
+      state.editing = undefined
+    })
   },
 })
 
-export const { nextRecipe, prevRecipe, toggleDescription } = recipeSlice.actions
+export const {
+  nextRecipe,
+  prevRecipe,
+  toggleDescription,
+  openRecipeDialog,
+  cancelEdit,
+} = recipeSlice.actions
 
 export const selectRecipeUi = (state: RootState) => state.recipeUi
 

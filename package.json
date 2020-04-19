@@ -20,6 +20,8 @@
     "@types/react-redux": "^7.1.5",
     "@types/resize-observer-browser": "^0.1.3",
     "@types/webpack-env": "^1.14.1",
+    "@types/yup": "^0.26.36",
+    "formik": "^2.1.4",
     "hash.js": "^1.1.7",
     "jest-junit-reporter": "^1.1.0",
     "pouchdb": "^7.1.1",
@@ -35,10 +37,12 @@
     "redux": "^4.0.4",
     "redux-persist": "^6.0.0",
     "redux-pouchdb": "^1.0.0-rc.3",
-    "typescript": "3.7.3"
+    "typescript": "3.7.3",
+    "yup": "^0.28.3"
   },
   "devDependencies": {
     "husky": "^4.2.3",
+    "import-sort-cli": "^6.0.0",
     "jest-junit-reporter": "^1.1.0",
     "lint-staged": "^10.0.8",
     "prettier": "1.19.1",
@@ -70,12 +74,14 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "post-checkout": "yarn install"
     }
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
       "prettier --write",
+      "import-sort --write",
       "eslint --fix"
     ]
   },

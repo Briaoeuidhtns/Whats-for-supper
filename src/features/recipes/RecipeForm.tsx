@@ -87,6 +87,8 @@ const RecipeForm: React.FC = () => {
     ...(recipe ?? {}),
   }
 
+  const dialogText = isEmpty(recipe) ? 'Add' : 'Edit'
+
   return (
     <Formik
       enableReinitialize
@@ -103,7 +105,7 @@ const RecipeForm: React.FC = () => {
           }}
         >
           <Form>
-            <DialogTitle>{isEmpty(recipe) ? 'Add' : 'Edit'} Recipe</DialogTitle>
+            <DialogTitle>{dialogText} Recipe</DialogTitle>
             <DialogContent>
               <DialogContentText>Add your recipe information</DialogContentText>
               <TextField
@@ -144,7 +146,7 @@ const RecipeForm: React.FC = () => {
                 Cancel
               </Button>
               <Button color="primary" type="submit">
-                Add
+                {dialogText}
               </Button>
             </DialogActions>
           </Form>

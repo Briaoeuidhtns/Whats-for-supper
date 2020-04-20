@@ -1,7 +1,9 @@
 import { Recipe, makeRecipe } from '.'
 import uiReducer, {
   availabilityStateMap,
+  cancelEdit,
   nextRecipe,
+  openRecipeDialog,
   prevRecipe,
   toggleDescription,
 } from './uiSlice'
@@ -111,6 +113,66 @@ describe('ui reducer', () => {
       )
     ).toMatchObject({
       showDescription: false,
+    })
+  })
+
+  it('should open the add recipe modal dialog', () => {
+    expect(
+      uiReducer(
+        {
+          ...defaultState,
+          editing: undefined,
+        },
+        { type: openRecipeDialog.type, payload: 'add' }
+      )
+    ).toMatchObject({
+      ...defaultState,
+      editing: 'add',
+    })
+  })
+
+  it('should open the edit current recipe modal dialog', () => {
+    expect(
+      uiReducer(
+        {
+          ...defaultState,
+          editing: undefined,
+        },
+        { type: openRecipeDialog.type, payload: 'current' }
+      )
+    ).toMatchObject({
+      ...defaultState,
+      editing: defaultState.index,
+    })
+  })
+
+  it('should open the edit at index recipe modal dialog', () => {
+    expect(
+      uiReducer(
+        {
+          ...defaultState,
+          editing: undefined,
+        },
+        { type: openRecipeDialog.type, payload: 0 }
+      )
+    ).toMatchObject({
+      ...defaultState,
+      editing: 0,
+    })
+  })
+
+  it('should close the recipe modal dialog', () => {
+    expect(
+      uiReducer(
+        {
+          ...defaultState,
+          editing: 'add',
+        },
+        { type: cancelEdit.type }
+      )
+    ).toMatchObject({
+      ...defaultState,
+      editing: undefined,
     })
   })
 })

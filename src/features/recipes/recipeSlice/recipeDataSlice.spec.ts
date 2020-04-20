@@ -2,6 +2,7 @@ import recipeDataReducer, {
   Recipe,
   RecipeListState,
   addRecipe,
+  editRecipe,
   shuffleRecipes,
 } from './recipeDataSlice'
 
@@ -44,6 +45,20 @@ describe('recipe data reducer', () => {
       )
     ).toMatchObject({
       recipes: [dummyRecipe, dummyRecipe2],
+    })
+  })
+
+  it('should handle editRecipe', () => {
+    expect(
+      recipeDataReducer(
+        {
+          ...minimalInitialState,
+          recipes: [dummyRecipe],
+        },
+        { type: editRecipe.type, payload: { index: 0, recipe: dummyRecipe2 } }
+      )
+    ).toMatchObject({
+      recipes: [dummyRecipe2],
     })
   })
 

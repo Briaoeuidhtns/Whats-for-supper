@@ -12,7 +12,7 @@ import { makeRecipe } from './combinedActions'
 export interface RecipeUiState {
   index: number
   showDescription: boolean
-  editing?: number
+  editing?: number | 'add'
 }
 
 let initialState: RecipeUiState = {
@@ -39,9 +39,9 @@ const recipeSlice = createSlice({
     },
     openRecipeDialog(
       state,
-      { payload: index = NEW_RECIPE }: PayloadAction<number | undefined>
+      { payload: toEdit }: PayloadAction<number | 'add' | 'current'>
     ) {
-      state.editing = index
+      state.editing = toEdit === 'current' ? state.index : toEdit
     },
     cancelEdit(state) {
       state.editing = undefined

@@ -6,12 +6,18 @@ import {
   MenuItem,
   makeStyles,
 } from '@material-ui/core'
-import { Delete as DeleteIcon, MoreVert as MenuIcon } from '@material-ui/icons'
+import {
+  Delete as DeleteIcon,
+  Edit as EditIcon,
+  MoreVert as MenuIcon,
+} from '@material-ui/icons'
 import React, { useRef, useState } from 'react'
 import {
   Recipe,
   availabilityStateMap,
+  editRecipe,
   nextRecipe,
+  openRecipeDialog,
   prevRecipe,
   removeRecipe,
   selectIndex,
@@ -51,7 +57,13 @@ const mapState = createSelector(
   })
 )
 
-const mapDispatch = { toggleDescription, removeRecipe, nextRecipe }
+const mapDispatch = {
+  toggleDescription,
+  removeRecipe,
+  nextRecipe,
+  editRecipe,
+  openRecipeDialog,
+}
 
 interface OwnProps {}
 
@@ -82,6 +94,7 @@ const RecipeList: React.FC<Props> = ({
   toggleDescription,
   nextRecipe,
   removeRecipe,
+  openRecipeDialog,
   has,
 }) => {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null)
@@ -159,6 +172,17 @@ const RecipeList: React.FC<Props> = ({
   return (
     <>
       <Menu anchorEl={menuAnchor} open={!!menuAnchor} onClose={closeMenu}>
+        <MenuItem
+          onClick={() => {
+            closeMenu()
+            openRecipeDialog('current')
+          }}
+        >
+          <ListItemIcon>
+            <EditIcon />
+          </ListItemIcon>
+          Edit
+        </MenuItem>
         <MenuItem
           onClick={() => {
             closeMenu()

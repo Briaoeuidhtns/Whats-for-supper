@@ -10,7 +10,6 @@ import {
   Typography,
 } from '@material-ui/core'
 import { Form, Formik, FormikConfig } from 'formik'
-import { NEW_RECIPE, cancelEdit } from './recipeSlice/uiSlice'
 import React, { useCallback } from 'react'
 import { Recipe, addRecipe, editRecipe } from './recipeSlice/recipeDataSlice'
 import { useDispatch, useSelector } from 'react-redux'
@@ -19,15 +18,17 @@ import Rating from 'components/MuiFormik/Rating'
 import { RootState } from 'app/rootReducer'
 import TagInput from 'components/TagInput'
 import TextField from 'components/MuiFormik/TextField'
+import { cancelEdit } from './recipeSlice/uiSlice'
 import { isEmpty } from 'lodash'
 
 const selectEdit = (state: RootState) => {
   const index = state.recipeUi.editing
+  let recipe: Partial<Recipe> | undefined
 
-  if (index != null)
-    return { recipe: state.recipes.recipes[index] ?? {}, index }
-
-  return { recipe: undefined, index }
+  if (index == null) recipe = undefined
+  else if (index === 'add') recipe = {}
+  else recipe = state.recipes.recipes[index]
+  return { recipe, index }
 }
 
 const dialogValidationSchema = yup.object<Recipe>({
@@ -47,7 +48,7 @@ const dialogValidationSchema = yup.object<Recipe>({
   tags: yup.array().of(yup.string().max(25)),
 })
 
-const FormDialog: React.FC = () => {
+const RecipeForm: React.FC = () => {
   const dispatch = useDispatch()
   const { recipe, index } = useSelector(selectEdit)
 
@@ -57,8 +58,19 @@ const FormDialog: React.FC = () => {
       // Makes ts happy, and better to be loud if something goes wrong
       if (index == null) throw new Error("Can't submit edit while not editing")
 
-      if (index === NEW_RECIPE) dispatch(addRecipe(data))
-      else dispatch(editRecipe({ recipe: data, index }))
+      if (index === 'add') dispatch(addRecipe(data))
+      else
+        dispatch(
+          editRecipe({
+            recipe: {
+              image: encodeURI(
+                `https://loremflickr.com/400/250/${data.title}?lock=1`
+              ),
+              ...data,
+            },
+            index,
+          })
+        )
 
       setSubmitting(false)
       resetForm()
@@ -71,6 +83,7 @@ const FormDialog: React.FC = () => {
     description: '',
     rating: 0,
     tags: [],
+    // undefined if not shown, doesn't matter what's here in that case
     ...(recipe ?? {}),
   }
 
@@ -141,4 +154,4 @@ const FormDialog: React.FC = () => {
   )
 }
 
-export default FormDialog
+export default RecipeForm

@@ -1,5 +1,6 @@
 import {
   Add as AddIcon,
+  Copyright as DisclaimerIcon,
   Menu as MenuIcon,
   Search as SearchIcon,
   Settings as SettingsIcon,
@@ -21,6 +22,7 @@ import {
 } from '@material-ui/core'
 import React, { useState } from 'react'
 
+import Disclaimer from './Disclaimer'
 import { openRecipeDialog } from 'features/recipes/recipeSlice'
 import { useDispatch } from 'react-redux'
 
@@ -76,6 +78,7 @@ const useStyles = makeStyles(theme =>
 const AppBar: React.FC = () => {
   const classes = useStyles()
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [disclaimerOpen, setDisclaimerOpen] = useState(false)
   const dispatch = useDispatch()
   return (
     <MuiAppBar className={classes.main} position="static">
@@ -120,6 +123,19 @@ const AppBar: React.FC = () => {
               <SettingsIcon />
             </ListItemIcon>
             <ListItemText primary="Settings" />
+          </ListItem>
+          <ListItem button>
+            <ListItemIcon>
+              <DisclaimerIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary="License disclaimers"
+              onClick={() => setDisclaimerOpen(true)}
+            />
+            <Disclaimer
+              open={disclaimerOpen}
+              onClose={() => setDisclaimerOpen(false)}
+            />
           </ListItem>
         </List>
       </Drawer>

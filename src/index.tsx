@@ -1,6 +1,7 @@
 import * as Sentry from '@sentry/browser'
 import * as serviceWorker from './serviceWorker'
 
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 import { initVoiceRecognition, voiceReduxAdaptor } from 'features/voice'
 import {
   makeRecipe,
@@ -9,12 +10,15 @@ import {
 } from 'features/recipes/recipeSlice'
 
 import App from './components/App'
+import { DbOwner } from 'app/db'
 import ErrorBoundary from 'components/ErrorBoundary'
+import Homepage from 'components/Homescreen'
 import { LinearProgress } from '@material-ui/core'
+import LoginForm from 'features/accounts/LoginForm'
 import { Provider } from 'react-redux'
 import React from 'react'
 import RehydrateGuard from 'components/RehydrateGuard'
-import { init as initDB } from 'app/db'
+import SignupForm from 'features/accounts/SignupForm'
 import { version as release } from '../package.json'
 import { render } from 'react-dom'
 import store from './app/store'
@@ -26,24 +30,31 @@ Sentry.init({
   environment: process.env.NODE_ENV,
 })
 
-initDB(store, {
-  host: process.env.REACT_APP_COUCHDB_HOST,
-  port:
-    (process.env.REACT_APP_COUCHDB_PORT &&
-      parseInt(process.env.REACT_APP_COUCHDB_PORT)) ||
-    undefined,
-  name: process.env.REACT_APP_COUCHDB_DB,
-})
-
 const Configured: React.FC = () => {
   useStyles()
 
   return (
     <ErrorBoundary>
       <Provider store={store}>
-        <RehydrateGuard loading={<LinearProgress />}>
-          <App />
-        </RehydrateGuard>
+        <Router>
+          <Switch>
+            <Route path="/login">
+              <LoginForm />
+            </Route>
+            <Route path="/signup">
+              <SignupForm />
+            </Route>
+            <Route path="/app">
+              <DbOwner />
+              <RehydrateGuard loading={<LinearProgress />}>
+                <App />
+              </RehydrateGuard>
+            </Route>
+            <Route path="/">
+              <Homepage />
+            </Route>
+          </Switch>
+        </Router>
       </Provider>
     </ErrorBoundary>
   )

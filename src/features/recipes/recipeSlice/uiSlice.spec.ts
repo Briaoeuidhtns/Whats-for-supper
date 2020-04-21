@@ -9,6 +9,9 @@ import uiReducer, {
 } from './uiSlice'
 
 const defaultState = uiReducer(undefined, { type: undefined })
+const rootstate = {
+  settings: { voiceControl: false },
+}
 
 const dummyRecipe: Recipe = {
   title: 'Dummy Recipe',
@@ -181,8 +184,11 @@ describe('avaliability state map', () => {
   it('describes recipe availability', () => {
     expect(
       availabilityStateMap({
-        recipes: { recipes: [] },
-        recipeUi: { ...defaultState, index: 0 },
+        ...rootstate,
+        recipes: {
+          recipes: { recipes: [] },
+          recipeUi: { ...defaultState, index: 0 },
+        },
       })
     ).toEqual({
       hasPrev: false,
@@ -192,8 +198,11 @@ describe('avaliability state map', () => {
 
     expect(
       availabilityStateMap({
-        recipes: { recipes: [dummyRecipe] },
-        recipeUi: { ...defaultState, index: 0 },
+        ...rootstate,
+        recipes: {
+          recipes: { recipes: [dummyRecipe] },
+          recipeUi: { ...defaultState, index: 0 },
+        },
       })
     ).toEqual({
       hasPrev: false,
@@ -203,8 +212,11 @@ describe('avaliability state map', () => {
 
     expect(
       availabilityStateMap({
-        recipes: { recipes: [dummyRecipe, dummyRecipe] },
-        recipeUi: { ...defaultState, index: 0 },
+        ...rootstate,
+        recipes: {
+          recipes: { recipes: [dummyRecipe, dummyRecipe] },
+          recipeUi: { ...defaultState, index: 0 },
+        },
       })
     ).toEqual({
       hasPrev: false,
@@ -214,8 +226,11 @@ describe('avaliability state map', () => {
 
     expect(
       availabilityStateMap({
-        recipes: { recipes: [dummyRecipe, dummyRecipe] },
-        recipeUi: { ...defaultState, index: 1 },
+        ...rootstate,
+        recipes: {
+          recipes: { recipes: [dummyRecipe, dummyRecipe] },
+          recipeUi: { ...defaultState, index: 1 },
+        },
       })
     ).toEqual({
       hasPrev: true,

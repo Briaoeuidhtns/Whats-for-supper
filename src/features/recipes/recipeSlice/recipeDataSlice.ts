@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit'
 
 import InitialRecipes from 'recipes'
 import { RootState } from 'app/rootReducer'
@@ -61,6 +61,11 @@ const recipeDataSlice = createSlice({
 
 export const { addRecipe, editRecipe, shuffleRecipes } = recipeDataSlice.actions
 
-export const selectRecipes = (state: RootState) => state.recipes.recipes
+export const selectRecipeDataSlice = (state: RootState) => state.recipes.recipes
+
+export const selectRecipes = createSelector(
+  [selectRecipeDataSlice],
+  (state: RecipeListState) => state.recipes
+)
 
 export default recipeDataSlice.reducer

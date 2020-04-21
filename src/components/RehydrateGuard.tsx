@@ -1,15 +1,19 @@
 import React from 'react'
-import { RootState } from 'app/rootReducer'
+import { createSelector } from '@reduxjs/toolkit'
+import { selectRecipeDataSlice } from 'features/recipes/recipeSlice/recipeDataSlice'
 import { useSelector } from 'react-redux'
 
 interface Props {
   loading?: React.ReactNode
 }
 
+const selectRehydrate = createSelector(
+  selectRecipeDataSlice,
+  ({ rehydrated }) => rehydrated
+)
+
 const RehydrateGuard: React.FC<Props> = ({ loading, children }) => {
-  const rehydrated = useSelector(
-    ({ recipes: { rehydrated } }: RootState) => rehydrated
-  )
+  const rehydrated = useSelector(selectRehydrate)
   return <>{rehydrated ? children : loading}</>
 }
 

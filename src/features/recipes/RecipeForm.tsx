@@ -11,25 +11,41 @@ import {
 } from '@material-ui/core'
 import { Form, Formik, FormikConfig } from 'formik'
 import React, { useCallback } from 'react'
-import { Recipe, addRecipe, editRecipe } from './recipeSlice/recipeDataSlice'
+import {
+  Recipe,
+  addRecipe,
+  editRecipe,
+  selectRecipes,
+} from './recipeSlice/recipeDataSlice'
+import {
+  RecipeUiState,
+  cancelEdit,
+  selectRecipeUiSlice,
+} from './recipeSlice/uiSlice'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Rating from 'components/MuiFormik/Rating'
-import { RootState } from 'app/rootReducer'
 import TagInput from 'components/TagInput'
 import TextField from 'components/MuiFormik/TextField'
-import { cancelEdit } from './recipeSlice/uiSlice'
+import { createSelector } from '@reduxjs/toolkit'
 import { isEmpty } from 'lodash'
 
-const selectEdit = (state: RootState) => {
-  const index = state.recipeUi.editing
-  let recipe: Partial<Recipe> | undefined
+const selectEditing = createSelector(
+  selectRecipeUiSlice,
+  (state: RecipeUiState) => state.editing
+)
 
-  if (index == null) recipe = undefined
-  else if (index === 'add') recipe = {}
-  else recipe = state.recipes.recipes[index]
-  return { recipe, index }
-}
+const selectEdit = createSelector(
+  [selectEditing, selectRecipes],
+  (index, recipes) => {
+    let recipe: Partial<Recipe> | undefined
+
+    if (index == null) recipe = undefined
+    else if (index === 'add') recipe = {}
+    else recipe = recipes[index]
+    return { recipe, index }
+  }
+)
 
 const dialogValidationSchema = yup.object<Recipe>({
   title: yup

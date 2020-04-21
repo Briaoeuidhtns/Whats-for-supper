@@ -41,7 +41,8 @@ const TUTORIAL_RECIPE: Readonly<Recipe> = {
 
 const selectRecipe = createSelector(
   [selectRecipes, selectIndex],
-  (recipes, index) => {
+  (recipes: Recipe[], index) => {
+    // TODO: typing is not inferred correctly
     const [head, next] = recipes.slice(index, index + 1 + 1)
     return [head, next ?? TUTORIAL_RECIPE]
   }

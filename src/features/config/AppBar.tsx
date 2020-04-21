@@ -23,6 +23,7 @@ import {
 import React, { useState } from 'react'
 
 import Disclaimer from './Disclaimer'
+import SettingsDialog from './Settings'
 import { openRecipeDialog } from 'features/recipes/recipeSlice'
 import { useDispatch } from 'react-redux'
 
@@ -79,6 +80,7 @@ const AppBar: React.FC = () => {
   const classes = useStyles()
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [disclaimerOpen, setDisclaimerOpen] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(false)
   const dispatch = useDispatch()
   return (
     <MuiAppBar className={classes.main} position="static">
@@ -122,7 +124,14 @@ const AppBar: React.FC = () => {
             <ListItemIcon>
               <SettingsIcon />
             </ListItemIcon>
-            <ListItemText primary="Settings" />
+            <ListItemText
+              primary="Settings"
+              onClick={() => setSettingsOpen(true)}
+            />
+            <SettingsDialog
+              open={settingsOpen}
+              onClose={() => setSettingsOpen(false)}
+            />
           </ListItem>
           <ListItem button>
             <ListItemIcon>

@@ -42,7 +42,7 @@ export const remoteAuth = new PouchDB<never>(
 )
 
 export interface Model {
-  state: Omit<RootState['recipes'], 'rehydrated'>
+  state: Omit<RootState['recipes']['recipes'], 'rehydrated'>
 }
 
 const shuffleSalt = Date.now()
@@ -102,7 +102,7 @@ export const init = async (store: Store) => {
           return db
         })(state)
       ),
-    state => state.recipes
+    state => state.recipes.recipes
   )
 }
 

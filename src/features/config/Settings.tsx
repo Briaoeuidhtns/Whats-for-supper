@@ -27,7 +27,9 @@ const SettingsDialog: React.FC<DialogProps> = props => {
             control={
               <Switch
                 checked={voiceControl}
-                onChange={() => dispatch(toggleVoiceControl)}
+                onChange={() => {
+                  dispatch(toggleVoiceControl())
+                }}
               />
             }
             label="Voice Control"

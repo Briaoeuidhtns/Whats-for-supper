@@ -83,72 +83,74 @@ const AppBar: React.FC = () => {
   const [settingsOpen, setSettingsOpen] = useState(false)
   const dispatch = useDispatch()
   return (
-    <MuiAppBar className={classes.main} position="static">
-      <Toolbar>
-        <IconButton
-          edge="start"
-          className={classes.menuButton}
-          color="inherit"
-          onClick={() => setDrawerOpen(true)}
-        >
-          <MenuIcon />
-        </IconButton>
-        <Typography className={classes.title} variant="h6" noWrap>
-          {"What's for Supper?"}
-        </Typography>
-        <div className={classes.search}>
-          <div className={classes.searchIcon}>
-            <SearchIcon />
+    <>
+      <MuiAppBar className={classes.main} position="static">
+        <Toolbar>
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            onClick={() => setDrawerOpen(true)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography className={classes.title} variant="h6" noWrap>
+            {"What's for Supper?"}
+          </Typography>
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
+            </div>
+            <InputBase
+              placeholder="Search…"
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+            />
           </div>
-          <InputBase
-            placeholder="Search…"
-            classes={{
-              root: classes.inputRoot,
-              input: classes.inputInput,
-            }}
-          />
-        </div>
-      </Toolbar>
-      <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-        <List>
-          <ListItem button>
-            <ListItemIcon>
-              <AddIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary="Add a recipe"
-              onClick={() => dispatch(openRecipeDialog('add'))}
-            />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <SettingsIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary="Settings"
-              onClick={() => setSettingsOpen(true)}
-            />
-            <SettingsDialog
-              open={settingsOpen}
-              onClose={() => setSettingsOpen(false)}
-            />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <DisclaimerIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary="License disclaimers"
-              onClick={() => setDisclaimerOpen(true)}
-            />
-            <Disclaimer
-              open={disclaimerOpen}
-              onClose={() => setDisclaimerOpen(false)}
-            />
-          </ListItem>
-        </List>
-      </Drawer>
-    </MuiAppBar>
+        </Toolbar>
+        <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+          <List>
+            <ListItem button>
+              <ListItemIcon>
+                <AddIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary="Add a recipe"
+                onClick={() => dispatch(openRecipeDialog('add'))}
+              />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary="Settings"
+                onClick={() => setSettingsOpen(true)}
+              />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <DisclaimerIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary="License disclaimers"
+                onClick={() => setDisclaimerOpen(true)}
+              />
+            </ListItem>
+          </List>
+        </Drawer>
+      </MuiAppBar>
+      <Disclaimer
+        open={disclaimerOpen}
+        onClose={() => setDisclaimerOpen(false)}
+      />
+      <SettingsDialog
+        open={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+      />
+    </>
   )
 }
 export default AppBar

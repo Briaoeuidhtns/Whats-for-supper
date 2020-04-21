@@ -1,16 +1,44 @@
 import { Box, Button, Card, Container, Typography } from '@material-ui/core'
 import { Form, Formik } from 'formik'
+import { NewAccount, newAccountSchema } from './account'
+import React, { useEffect, useState } from 'react'
 
-import React from 'react'
 import TextField from 'components/MuiFormik/TextField'
+import { addDefaultRecipes } from 'features/recipes/recipeSlice'
 import clsx from 'clsx'
-import { newAccountSchema } from './account'
+import { isPouchDBError } from 'util/types/pouchdb'
+import { remoteAuth } from 'app/db'
+import { testAwait } from 'util/test'
+import { useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import useStyles from './styles'
 
 interface Props {}
 
 const LoginForm: React.FC<Props> = () => {
   const classes = useStyles()
+  const [submitError, setSubmitError] = useState<PouchDB.Core.Error | unknown>()
+  const dispatch = useDispatch()
+  const history = useHistory()
+
+  // When first mounted, make sure the user isn't here by mistake, ie bookmark or smth
+  useEffect(() => {
+    let cancelled = false
+
+    testAwait(
+      remoteAuth.getSession().then(
+        ctx => {
+          // logout causes session to have a null name?
+          // doesn't match types, not documented, but whatever
+          if (ctx.ok && ctx.userCtx.name && !cancelled) history.replace('/app')
+        },
+        // Should fail in most cases
+        () => {}
+      )
+    )
+    return () => void (cancelled = true)
+  })
+
   return (
     <Box className={classes.verticalCenter}>
       <Container maxWidth="sm" component={Card} className={classes.card}>
@@ -24,10 +52,17 @@ const LoginForm: React.FC<Props> = () => {
             Create an account
           </Typography>
         </Box>
-
         <Formik
-          initialValues={{}}
-          onSubmit={data => {
+          initialValues={{} as NewAccount}
+          onSubmit={async data => {
+            try {
+              await remoteAuth.signUp(data.email, data.password)
+              await remoteAuth.logIn(data.email, data.password)
+              dispatch(addDefaultRecipes())
+              history.replace('/app')
+            } catch (e) {
+              setSubmitError(e)
+            }
             console.log(data)
           }}
           validationSchema={newAccountSchema}
@@ -62,6 +97,16 @@ const LoginForm: React.FC<Props> = () => {
                 variant="outlined"
                 label="Confirm Password"
               />
+              {submitError != null && (
+                <Typography color="error">
+                  Error:{' '}
+                  {isPouchDBError(submitError)
+                    ? submitError.message ??
+                      submitError.reason ??
+                      `unknown (${submitError.status})`
+                    : `unknown (${JSON.stringify(submitError)})`}
+                </Typography>
+              )}
               <Box className={classes.actions}>
                 <Button
                   type="submit"

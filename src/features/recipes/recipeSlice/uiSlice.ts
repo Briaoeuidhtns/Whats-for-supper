@@ -73,12 +73,12 @@ export const {
   cancelEdit,
 } = recipeSlice.actions
 
-export const selectRecipeUi = (state: RootState) => state.recipeUi
+export const selectRecipeUiSlice = (state: RootState) => state.recipes.recipeUi
 
-export const selectIndex = createSelector([selectRecipeUi], ui => ui.index)
+export const selectIndex = createSelector([selectRecipeUiSlice], ui => ui.index)
 
 export const selectShowDescription = createSelector(
-  [selectRecipeUi],
+  [selectRecipeUiSlice],
   ui => ui.showDescription
 )
 

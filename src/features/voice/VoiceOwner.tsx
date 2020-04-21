@@ -3,13 +3,15 @@ import React, { useEffect } from 'react'
 import { initVoiceRecognition, voiceReduxAdaptor } from '.'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { selectVoiceControl } from 'features/config/settingsSlice'
+
 /**
  * An owner and manager for voice control.
  */
 const VoiceOwner: React.FC<{
   actionMap: Record<string, ActionCreator<Action>>
 }> = ({ actionMap }) => {
-  const voiceEnabled = useSelector(() => true) // TODO get voice is enabled
+  const voiceEnabled = useSelector(selectVoiceControl) // TODO get voice is enabled
   const dispatch = useDispatch()
   useEffect(() => {
     if (voiceEnabled) {
